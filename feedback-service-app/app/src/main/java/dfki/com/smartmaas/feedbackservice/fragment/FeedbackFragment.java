@@ -25,6 +25,7 @@ import androidx.appcompat.app.AlertDialog;
 
 import com.google.gson.Gson;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -238,6 +239,17 @@ public class FeedbackFragment extends CustomFragment {
         }
 
         List<Reason> reasons = findOutReasons();
+
+        location.setName(locationEditText.getText().toString());
+        HashMap<String, Double> latLng = null;
+        try {
+            latLng = Utils.convertAddressToLatLng(location.getName(), activity);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        location.setLat(latLng.get("latitude"));
+        location.setLng(latLng.get("longitude"));
+
         if (feedback == null) {
             feedback = new Feedback(new Location(this.location),
                     stuckTime, measurementUnit, vehicle, vehicleNo);

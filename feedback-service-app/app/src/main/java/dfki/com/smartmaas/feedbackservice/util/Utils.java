@@ -19,6 +19,7 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -27,13 +28,31 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringWriter;
+import java.net.URL;
 import java.nio.charset.Charset;
+import java.security.KeyManagementException;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.Certificate;
+import java.security.cert.CertificateException;
+import java.security.cert.CertificateFactory;
+import java.security.cert.X509Certificate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManagerFactory;
 
 import dfki.com.smartmaas.feedbackservice.R;
 import dfki.com.smartmaas.feedbackservice.activity.MainActivity;
@@ -69,6 +88,16 @@ public class Utils {
         return addresses.get(0).getAddressLine(0);
     }
 
+    public static HashMap<String, Double> convertAddressToLatLng(String addressName, MainActivity mainActivity) throws IOException {
+        Geocoder geocoder = new Geocoder(mainActivity, Locale.getDefault());
+        List<Address> addresses = geocoder.getFromLocationName(addressName, 1);
+        HashMap<String, Double> location = new HashMap<>();
+        location.put("latitude", addresses.get(0).getLatitude());
+        location.put("longitude", addresses.get(0).getLongitude());
+
+        return location;
+    }
+
     public static String convertToJson(Object object) throws JsonProcessingException {
         if (object == null)
             return "";
@@ -93,11 +122,45 @@ public class Utils {
         return object;
     }
 
+    public static void sendRequestToFeedbackWebService(Context context, String data, String webServiceUrl, String contentType,
+                                                       HashMap<String, String> moreHeaders,
+                                                       String successMsg, String errorMsg) {
+        HttpsURLConnection httpsURLConnection;
+
+        try {
+            URL request_url = new URL(webServiceUrl);
+
+            httpsURLConnection = (HttpsURLConnection) request_url.openConnection();
+            httpsURLConnection.setRequestMethod("POST");
+            httpsURLConnection.setDoInput(true);
+
+
+            httpsURLConnection.setHostnameVerifier(new HostnameVerifier() {
+                @Override
+                public boolean verify(String hostname, SSLSession session) {
+                    if (context.getResources().getString(R.string.feedback_web_service_url).contains(hostname)) {
+                        return true;
+                    }
+                    return false;
+                }
+            });
+
+
+            httpsURLConnection.setSSLSocketFactory((SSLSocketFactory) SSLSocketFactory.getDefault());
+            httpsURLConnection.connect();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void postToFeedbWS(Context context, String data, String webServiceUrl, String contentType,
                                      HashMap<String, String> moreHeaders,
                                      String successMsg, String errorMsg) {
+
+
         StringRequest stringRequest = new StringRequest(Request.Method.POST, webServiceUrl,
                 new Response.Listener<String>() {
+
                     @Override
                     public void onResponse(String response) {
                         makeToast(context, successMsg);
@@ -131,9 +194,84 @@ public class Utils {
             }
         };
 
+
         Volley.newRequestQueue(context).add(stringRequest);
+
+//        Volley.newRequestQueue(context, new HurlStack(null, getSocketFactory(context))).add(stringRequest);
     }
 
+    public static SSLSocketFactory getSocketFactory(Context appContext) {
+
+        CertificateFactory cf = null;
+        try {
+
+            cf = CertificateFactory.getInstance("X.509");
+            InputStream caInput = appContext.getResources().openRawResource(R.raw.feedservcertificate);
+            Certificate ca;
+            try {
+
+                ca = cf.generateCertificate(caInput);
+                Log.e("CERT", "ca=" + ((X509Certificate) ca).getSubjectDN());
+            } finally {
+                caInput.close();
+            }
+
+
+            String keyStoreType = KeyStore.getDefaultType();
+            KeyStore keyStore = KeyStore.getInstance(keyStoreType);
+            keyStore.load(null, null);
+            keyStore.setCertificateEntry("ca", ca);
+
+
+            String tmfAlgorithm = TrustManagerFactory.getDefaultAlgorithm();
+            TrustManagerFactory tmf = TrustManagerFactory.getInstance(tmfAlgorithm);
+            tmf.init(keyStore);
+
+
+            HostnameVerifier hostnameVerifier = new HostnameVerifier() {
+                @Override
+                public boolean verify(String hostname, SSLSession session) {
+
+                    Log.e("CipherUsed", session.getCipherSuite());
+                    String serverURL = appContext.getResources().getString(R.string.feedback_web_service_url);
+                    if (serverURL.contains(hostname)) {
+                        return true;
+                    }
+                    return false;
+//                    return hostname.compareTo()==0; //The Hostname of your server.
+
+                }
+            };
+
+
+            HttpsURLConnection.setDefaultHostnameVerifier(hostnameVerifier);
+            SSLContext context = null;
+            context = SSLContext.getInstance("TLS");
+
+            context.init(null, tmf.getTrustManagers(), null);
+            HttpsURLConnection.setDefaultSSLSocketFactory(context.getSocketFactory());
+
+            SSLSocketFactory sf = context.getSocketFactory();
+
+
+            return sf;
+
+        } catch (CertificateException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (KeyStoreException e) {
+            e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (KeyManagementException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
 
     public static String removeAllSpaces(String trimMe) {
         StringBuilder trimmed = new StringBuilder();

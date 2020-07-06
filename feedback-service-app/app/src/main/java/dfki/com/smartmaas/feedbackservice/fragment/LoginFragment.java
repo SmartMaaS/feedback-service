@@ -123,16 +123,21 @@ public class LoginFragment extends CustomFragment {
                             .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
+
                                     if (task.isSuccessful()) {
                                         Utils.makeToast(activity, getResources()
                                                 .getString(R.string.register_success_message));
                                         logToRegisterAndViceVersa(false);
                                     } else {
-                                        Utils.makeToast(activity, getResources()
-                                                .getString(R.string.register_unsuccess_message));
+//                                        Utils.makeToast(activity, getResources()
+//                                                .getString(R.string.register_unsuccess_message));
+
+                                        Utils.makeToast(activity, task.getException().getMessage());
                                     }
                                     progressBar.setVisibility(View.GONE);
                                 }
+
+
                             });
                 } else {
                     firebaseAuth.signInWithEmailAndPassword(email, password)

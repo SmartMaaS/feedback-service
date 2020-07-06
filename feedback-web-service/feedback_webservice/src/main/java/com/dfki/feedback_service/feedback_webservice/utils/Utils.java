@@ -13,6 +13,8 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -97,7 +99,17 @@ public class Utils {
         if (params == null) {
             return restTemplate.getForObject(url, String.class);
         }
-        return restTemplate.getForObject(url, String.class, params);
+        String response;
+        try {
+            response = restTemplate.getForObject(url, String.class, params);
+        } catch (HttpClientErrorException e) {
+            response = e.getLocalizedMessage();
+            e.printStackTrace();
+        }catch (HttpServerErrorException e) {
+            response = e.getLocalizedMessage();
+            e.printStackTrace();
+        }
+        return response;
     }
 
     public static String postNearbyStops(String to, NearByStops nearByStops, int radius, int page) {

@@ -120,7 +120,7 @@
     <string name="details_message">Details</string>
     <string name="google_maps_package">com.google.android.apps.maps</string>
     <string name="feedback_submitted_message">Feedback is Successfully Submitted. Thank you!</string>
-    <string name="feedback_not_submitted_message">Feedback couldn\'t be submitted. Try again Please!</string>
+    <string name="feedback_not_submitted_message">Something went wrong. Location might be unreachable.</string>
     <string name="fbs_response_message">Feedback Web Service Response:</string>
     <string name="headers_content_type_message">Content-Type</string>
     <string name="fbs_error_message">Feedback Web Service Error:</string>

@@ -268,6 +268,7 @@ public class MainActivity extends AppCompatActivity implements FragmentControlle
     public void onLocationUpdated(Location mCurrentLocation, String mLastUpdateTime) {
         double lat = mCurrentLocation.getLatitude();
         double lng = mCurrentLocation.getLongitude();
+
         if (feedbackFragment.getLocation() != null) {
             this.location = feedbackFragment.getLocation();
         } else {

@@ -23,7 +23,7 @@ public class FeedbackController {
                                           @RequestHeader(size_header_key) int size,
                                           @RequestHeader(token_header_key) String token,
                                           @RequestBody final String userFeedback) {
-        System.out.println("FeedbackController.saveFeedback");
+        System.out.println("User Feedback: " + userFeedback);
         Feedback feedback = feedbackService.rdfToFeedback(userFeedback, "TURTLE");
         feedbackService.setToken(token);
         feedbackService.setPage(page);

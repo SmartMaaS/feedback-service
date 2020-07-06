@@ -150,7 +150,7 @@ public class FeedbackService implements ThreadCompleteListener {
 //        }
 
         String url = "https://usg-demo-4.sb.dfki.de:30101/service/gtfsld/" +
-                "/api/v1/providers/{provider}/stops/nearBy?" +
+                "api/v1/providers/{provider}/stops/nearBy?" +
                 "lat={lat}&lng={lng}&radius={radius}&size={size}&page={page}";
 //        String url = "https://usg-demo-4.sb.dfki.de:30101/service/smartmaas" +
 //                "/gtfsld/api/v1/providers/{provider}/stops/nearBy?lat={lat}&" +
