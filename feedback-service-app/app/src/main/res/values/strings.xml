@@ -1,0 +1,133 @@
+<resources>
+    <array name="measurementSpinnerEntries">
+        <item>minute</item>
+        <item>second</item>
+        <item>hour</item>
+        <item>day</item>
+    </array>
+    <array name="vehicleSpinnerEntries">
+        <item>bus</item>
+        <item>train</item>
+        <item>car</item>
+        <item>bicycle</item>
+        <item>foot</item>
+    </array>
+    <string name="app_name">Feedback Service</string>
+    <string name="smart">SMART</string>
+    <string name="maas">MAAS</string>
+    <string name="mobile">MOBILE</string>
+    <string name="word_email">Email:</string>
+    <string name="word_password">Password:</string>
+    <string name="word_stayLogged">Keep me logged in</string>
+    <string name="word_login">Login</string>
+    <string name="word_registr">Register</string>
+    <string name="word_feedback">Feedback</string>
+    <string name="word_profile">Profile</string>
+    <string name="word_settings">Settings</string>
+    <string name="privacyPolicy">Privacy &amp; Policy</string>
+    <string name="word_contact">Contact</string>
+    <string name="word_rate_app">Rate the App</string>
+    <string name="word_about">About</string>
+    <string name="fill_empty_slot">Please, fill mandatory slots!</string>
+    <string name="add_info">Additional Info:</string>
+    <string name="word_address">Address</string>
+    <string name="reason_rain_title">Rain</string>
+    <string name="reason_broken_jam_title">Broken Traffic Light</string>
+    <string name="reason_crash_title">Crash</string>
+    <string name="reason_traffic_jam_title">Traffic Jam</string>
+    <string name="reason_maintenance_title">Maintenance</string>
+    <string name="reason_other_title">Other</string>
+    <string name="word_yes">Yes</string>
+    <string name="word_no">No</string>
+    <string name="feedback_web_service_url">http://192.168.0.102:8803/feedback</string>
+    <string name="word_in">In</string>
+    <string name="word_on">On</string>
+    <string name="in_or_on">Vehicle:</string>
+    <string name="vehicle_number">No:</string>
+    <string name="try_again">Try again please!</string>
+    <string-array name="formats">
+        <item>TURTLE</item>
+        <item>TTL</item>
+        <item>NTRIPLES</item>
+        <item>TRIG</item>
+        <item>NQUADS</item>
+        <item>JSONOLD</item>
+        <item>RDFXML</item>
+        <item>RDFJSON</item>
+        <item>TRIX</item>
+        <item>RDFTHRFT</item>
+        <item>TURTLE</item>
+        <item>TTL</item>
+        <item>NTRIPLES</item>
+        <item>TRIG</item>
+        <item>NQUADS</item>
+        <item>JSONOLD</item>
+        <item>RDFXML</item>
+        <item>RDFJSON</item>
+        <item>TRIX</item>
+        <item>RDFTHRFT</item>
+        <item>TURTLE</item>
+        <item>TTL</item>
+        <item>NTRIPLES</item>
+        <item>TRIG</item>
+        <item>NQUADS</item>
+        <item>JSONOLD</item>
+        <item>RDFXML</item>
+        <item>RDFJSON</item>
+        <item>TRIX</item>
+        <item>RDFTHRFT</item>
+    </string-array>
+    <string-array name="content_types">
+        <item>application/xml</item>
+        <item>application/json</item>
+        <item>text/turtle</item>
+    </string-array>
+    <string name="channel_name">nearby_stops_notification_channel</string>
+    <string name="channel_description">Channel for nearby stops which comes from Feedback Web Service</string>
+    <string name="notification_title">Nearby Stops</string>
+    <string name="token_header_key">Current-Token_FBase</string>
+    <string name="page_header_key">Page</string>
+    <string name="size_header_key">Size</string>
+    <string name="radius_message">Radius: %1$d km</string>
+    <string name="size_message">Size: %1$d items</string>
+    <string name="more_stops_success_message">Obtaining %1$s more results</string>
+    <string name="nearby_stops_title">Nearby Stops \n   %1$s of %2$s</string>
+    <string name="intent_stops_message">Stops_data_intent_536</string>
+    <string name="notification_content_message">There are %1$s stops in %2$s km radius!</string>
+    <string name="firebase_message_key_for_intent">firebase_message_intent_key</string>
+    <!--    Shared Preferences -->
+    <string name="shared_preferences_name">Feedback_Service_Preferences_536</string>
+    <string name="stops_amount_SH_PR_key">total_stops_number_key_536</string>
+    <string name="user_id_key_shrd_prfs">UID</string>
+    <string name="size_SH_PR_key">size_value_key_536</string>
+    <string name="firebase_token_SH_PR_key">firebase_token_536</string>
+    <string name="nearby_stops_radius_SH_PR_key">nearby_stops_radius_key_536</string>
+    <string name="nearby_stops_data_SH_PR_key">nearby_stops_data_key__536</string>
+    <string name="notification_divider">###</string>
+    <string name="feedback_object_SH_PR_key">latest_feedback_object_in_json_key</string>
+    <string name="latest_page_SH_PR_key">latest_loaded_page_key</string>
+    <string name="size_of_list_per_request_from_feedback_web_service">15</string>
+    <string name="page_number_for_first_request_from_feedback_web_service">1</string>
+    <string name="are_you_sure_message">Are you sure?</string>
+    <string name="login_success_message">Login Successful!</string>
+    <string name="log_unsuccess_message">Login Unsuccessful!</string>
+    <string name="register_success_message">Registration Successful!</string>
+    <string name="register_unsuccess_message">Registration Unsuccessful!</string>
+    <string name="user_email_shrd_prf_key">UEmail</string>
+    <string name="authent_shrd_prfs_key">Auth</string>
+    <string name="firebase_unsuccess_message">Connection to Firebase is Unsuccessful</string>
+    <string name="double_click_to_exit_message">Double Tap to exit</string>
+    <string name="details_message">Details</string>
+    <string name="google_maps_package">com.google.android.apps.maps</string>
+    <string name="feedback_submitted_message">Feedback is Successfully Submitted. Thank you!</string>
+    <string name="feedback_not_submitted_message">Feedback couldn\'t be submitted. Try again Please!</string>
+    <string name="fbs_response_message">Feedback Web Service Response:</string>
+    <string name="headers_content_type_message">Content-Type</string>
+    <string name="fbs_error_message">Feedback Web Service Error:</string>
+    <string name="more_stops_error_message">Sorry, couldn\'t fetch more results.</string>
+    <string name="enter_email_text">Please enter email!</string>
+    <string name="enter_password_text">Please enter password!</string>
+    <string name="first_page_from_feedbackWS">1</string>
+    <string name="error_notification_message">Try again, please!</string>
+    <string name="no_data_found_shrd_prfs">Attention!!! No Data found for the key</string>
+</resources>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/feedbackMenuItem"
+        android:icon="@drawable/feedback"
+        android:title="@string/word_feedback"
+        />
+
+    <item
+        android:id="@+id/profileMenuItem"
+        android:icon="@drawable/profile"
+        android:title="@string/word_profile" />
+
+    <item
+        android:id="@+id/settingsMenuItem"
+        android:icon="@drawable/settings"
+        android:title="@string/word_settings" />
+</menu>
