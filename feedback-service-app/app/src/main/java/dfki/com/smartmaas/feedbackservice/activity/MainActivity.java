@@ -203,7 +203,7 @@ public class MainActivity extends AppCompatActivity implements FragmentControlle
         }
 
         this.singleBack = true;
-        Utils.makeToast(this, getResources().getString(R.string.double_click_to_exit_message));
+        Utils.makeShortToast(this, getResources().getString(R.string.double_click_to_exit_message));
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {

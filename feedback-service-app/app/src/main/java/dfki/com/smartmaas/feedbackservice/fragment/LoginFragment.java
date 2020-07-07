@@ -107,12 +107,12 @@ public class LoginFragment extends CustomFragment {
                 email = usernameEdTx.getText().toString().trim();
                 password = passEdTx.getText().toString().trim();
                 if (TextUtils.isEmpty(email)) {
-                    Utils.makeToast(activity, getResources().getString(R.string.enter_email_text));
+                    Utils.makeShortToast(activity, getResources().getString(R.string.enter_email_text));
                     Utils.requestFocusAndShowKeyboard(getContext(), usernameEdTx);
                     return;
                 }
                 if (TextUtils.isEmpty(password)) {
-                    Utils.makeToast(activity, getResources().getString(R.string.enter_password_text));
+                    Utils.makeShortToast(activity, getResources().getString(R.string.enter_password_text));
                     Utils.requestFocusAndShowKeyboard(getContext(), passEdTx);
                     return;
                 }
@@ -125,14 +125,14 @@ public class LoginFragment extends CustomFragment {
                                 public void onComplete(@NonNull Task<AuthResult> task) {
 
                                     if (task.isSuccessful()) {
-                                        Utils.makeToast(activity, getResources()
+                                        Utils.makeShortToast(activity, getResources()
                                                 .getString(R.string.register_success_message));
                                         logToRegisterAndViceVersa(false);
                                     } else {
 //                                        Utils.makeToast(activity, getResources()
 //                                                .getString(R.string.register_unsuccess_message));
 
-                                        Utils.makeToast(activity, task.getException().getMessage());
+                                        Utils.makeShortToast(activity, task.getException().getMessage());
                                     }
                                     progressBar.setVisibility(View.GONE);
                                 }
@@ -145,7 +145,7 @@ public class LoginFragment extends CustomFragment {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                     if (task.isSuccessful()) {
-                                        Utils.makeToast(activity, getResources().getString(R.string.login_success_message));
+                                        Utils.makeShortToast(activity, getResources().getString(R.string.login_success_message));
                                         progressBar.setVisibility(View.GONE);
                                         if (loggedInChBox.isChecked()) {
                                             sharedPreferences.edit()
@@ -158,7 +158,7 @@ public class LoginFragment extends CustomFragment {
                                         }
                                         openFeedbackFragment();
                                     } else {
-                                        Utils.makeToast(activity, getResources()
+                                        Utils.makeShortToast(activity, getResources()
                                                 .getString(R.string.log_unsuccess_message));
                                         progressBar.setVisibility(View.GONE);
                                     }

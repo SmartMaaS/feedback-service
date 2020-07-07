@@ -33,6 +33,7 @@ import java.util.Objects;
 
 import dfki.com.smartmaas.feedbackservice.R;
 import dfki.com.smartmaas.feedbackservice.activity.MainActivity;
+import dfki.com.smartmaas.feedbackservice.exception.InvalidLocationNameException;
 import dfki.com.smartmaas.feedbackservice.model.CustomFragment;
 import dfki.com.smartmaas.feedbackservice.model.Feedback;
 import dfki.com.smartmaas.feedbackservice.model.Location;
@@ -246,6 +247,12 @@ public class FeedbackFragment extends CustomFragment {
             latLng = Utils.convertAddressToLatLng(location.getName(), activity);
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (InvalidLocationNameException e) {
+
+            e.printStackTrace();
+            Utils.makeLongToast(activity, e.getMessage());
+            locationEditText.setHint(e.getMessage());
+            return;
         }
         location.setLat(latLng.get("latitude"));
         location.setLng(latLng.get("longitude"));

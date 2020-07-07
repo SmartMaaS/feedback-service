@@ -56,6 +56,7 @@ import javax.net.ssl.TrustManagerFactory;
 
 import dfki.com.smartmaas.feedbackservice.R;
 import dfki.com.smartmaas.feedbackservice.activity.MainActivity;
+import dfki.com.smartmaas.feedbackservice.exception.InvalidLocationNameException;
 
 
 public class Utils {
@@ -88,9 +89,12 @@ public class Utils {
         return addresses.get(0).getAddressLine(0);
     }
 
-    public static HashMap<String, Double> convertAddressToLatLng(String addressName, MainActivity mainActivity) throws IOException {
+    public static HashMap<String, Double> convertAddressToLatLng(String addressName, MainActivity mainActivity) throws IOException, InvalidLocationNameException {
         Geocoder geocoder = new Geocoder(mainActivity, Locale.getDefault());
         List<Address> addresses = geocoder.getFromLocationName(addressName, 1);
+        if (addresses.size()==0){
+            throw new InvalidLocationNameException("Location is invalid!");
+        }
         HashMap<String, Double> location = new HashMap<>();
         location.put("latitude", addresses.get(0).getLatitude());
         location.put("longitude", addresses.get(0).getLongitude());
@@ -163,14 +167,14 @@ public class Utils {
 
                     @Override
                     public void onResponse(String response) {
-                        makeToast(context, successMsg);
+                        makeShortToast(context, successMsg);
                         Log.i(tag, context.getResources()
                                 .getString(R.string.fbs_response_message) + response);
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                makeToast(context, errorMsg);
+                makeShortToast(context, errorMsg);
                 Log.e(tag, context.getResources().getString(R.string.fbs_error_message)
                         + error.getMessage());
             }
@@ -327,7 +331,12 @@ public class Utils {
                 getString(R.string.no_data_found_shrd_prfs));
     }
 
-    public static void makeToast(Context context, String message) {
+    public static void makeShortToast(Context context, String message) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
     }
+
+    public static void makeLongToast(Context context, String message) {
+        Toast.makeText(context, message, Toast.LENGTH_LONG).show();
+    }
+
 }
