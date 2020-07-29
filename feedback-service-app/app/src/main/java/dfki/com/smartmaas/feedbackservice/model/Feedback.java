@@ -4,7 +4,16 @@ import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.riot.RDFFormat;
 import org.apache.jena.vocabulary.RDF;
+import org.eclipse.rdf4j.model.IRI;
+import org.eclipse.rdf4j.model.Literal;
+import org.eclipse.rdf4j.model.Namespace;
+import org.eclipse.rdf4j.model.Statement;
+import org.eclipse.rdf4j.model.ValueFactory;
+import org.eclipse.rdf4j.model.impl.LinkedHashModel;
+import org.eclipse.rdf4j.model.impl.SimpleNamespace;
+import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
@@ -103,7 +112,33 @@ public class Feedback {
         this.feedbackURI = feedbackURI;
     }
 
+    public void getRDFForm(RDFFormat rdfFormat) {
+        org.eclipse.rdf4j.model.Model model = new LinkedHashModel();
+        ValueFactory valueFactory = SimpleValueFactory.getInstance();
+
+        Namespace feedbackNamespace = new SimpleNamespace("feedback", "http://example.org/feedback/");
+        IRI feedback = valueFactory.createIRI(feedbackNamespace.getName());
+        IRI geo = valueFactory.createIRI(feedbackNamespace.getName() + "location");
+        IRI ns3 = valueFactory.createIRI(feedbackNamespace.getName() + "stuck_duration");
+        IRI vhc = valueFactory.createIRI(feedbackNamespace.getName() + "travelsOn");
+        IRI cse = valueFactory.createIRI(feedbackNamespace.getName() + "because_of");
+        IRI rsn = valueFactory.createIRI(feedbackNamespace.getName() + "reasons");
+        IRI lcnn = valueFactory.createIRI(feedbackNamespace.getName() + "name");
+        IRI lcnlg = valueFactory.createIRI(feedbackNamespace.getName() + "lat");
+        IRI lcnlt = valueFactory.createIRI(feedbackNamespace.getName() + "long");
+        IRI emotion = valueFactory.createIRI(feedbackNamespace.getName() + "radius");
+
+        Literal location = valueFactory.createLiteral(getLocation().getName());
+
+
+
+        Statement statement = valueFactory.createStatement(feedback, lcnn, location);
+
+
+    }
+
     public String getRDFOutput(String rdfOutputFormat) {
+
         Model model = ModelFactory.createDefaultModel();
         Property geo = model.createProperty("https://www.w3.org/2003/01/geo/wgs84_pos#", "location");
         Property ns3 = model.createProperty("http://purl.org/NET/c4dm/timeline.owl#", "stuck_duration");
@@ -143,6 +178,7 @@ public class Feedback {
         model.setNsPrefix("emotion", emotion.getNameSpace());
         StringWriter out = new StringWriter();
         model.write(out, rdfOutputFormat);
+//        System.out.println("String.valueOf(out) = " + String.valueOf(out));
         return String.valueOf(out);
     }
 

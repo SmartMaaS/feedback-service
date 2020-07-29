@@ -19,7 +19,6 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -92,7 +91,7 @@ public class Utils {
     public static HashMap<String, Double> convertAddressToLatLng(String addressName, MainActivity mainActivity) throws IOException, InvalidLocationNameException {
         Geocoder geocoder = new Geocoder(mainActivity, Locale.getDefault());
         List<Address> addresses = geocoder.getFromLocationName(addressName, 1);
-        if (addresses.size()==0){
+        if (addresses.size() == 0) {
             throw new InvalidLocationNameException("Location is invalid!");
         }
         HashMap<String, Double> location = new HashMap<>();
@@ -168,7 +167,7 @@ public class Utils {
                     @Override
                     public void onResponse(String response) {
                         makeShortToast(context, successMsg);
-                        Log.i(tag, context.getResources()
+                        Log.i(tag, "\n" + context.getResources()
                                 .getString(R.string.fbs_response_message) + response);
                     }
                 }, new Response.ErrorListener() {
@@ -195,6 +194,60 @@ public class Utils {
                     headers.put(key, value);
                 }
                 return headers;
+            }
+
+
+        };
+
+
+        Volley.newRequestQueue(context).add(stringRequest);
+
+//        Volley.newRequestQueue(context, new HurlStack(null, getSocketFactory(context))).add(stringRequest);
+    }
+
+    public static void postToGTFSLD(Context context, String data, String webServiceUrl, String contentType,
+                                    HashMap<String, String> moreHeaders, Map<String, String> params,
+                                    String successMsg, String errorMsg) {
+
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, webServiceUrl,
+                new Response.Listener<String>() {
+
+                    @Override
+                    public void onResponse(String response) {
+                        makeShortToast(context, successMsg);
+                        Log.i(tag, "\n" + context.getResources()
+                                .getString(R.string.fbs_response_message) + response);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                makeShortToast(context, errorMsg);
+                Log.e(tag, context.getResources().getString(R.string.fbs_error_message)
+                        + error.getMessage());
+            }
+        }) {
+
+//            @Override
+//            public byte[] getBody() throws AuthFailureError {
+//                return data.getBytes(Charset.defaultCharset());
+//            }
+//
+//            @Override
+//            public Map<String, String> getHeaders() throws AuthFailureError {
+//                HashMap<String, String> headers = new HashMap<String, String>();
+//                headers.put(context.getResources()
+//                        .getString(R.string.headers_content_type_message), contentType);
+//                for (String key : moreHeaders.keySet()) {
+//                    String value = moreHeaders.get(key);
+//                    headers.put(key, value);
+//                }
+//                return headers;
+//            }
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                return params;
             }
         };
 

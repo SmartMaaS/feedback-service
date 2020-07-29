@@ -46,7 +46,7 @@ public class FeedbackFragment extends CustomFragment {
     private ImageButton currentLocationBtn;
     private EditText stuckEditText, locationEditText, otherReasonEditText, vehicleNoEditText;
     private CheckBox rainChB, crashChB, brokenTrLightChB, maintenanceChB, trafficJamChB, otherChB;
-    private Button submitButton, cleanButton;
+    private Button submitButton, cleanButton, alternativeRoutesButton;
     private Feedback feedback;
     private Location location;
     private TextView radiusTextView;
@@ -76,6 +76,7 @@ public class FeedbackFragment extends CustomFragment {
         initialiseCurrentLocationButton();
         initialiseOtherCheckBox();
         initialiseSeekBar();
+        initialiseAlternativeRoutesButton();
         Utils.requestFocusAndShowKeyboard(getContext(), stuckEditText);
 
         return view;
@@ -100,6 +101,7 @@ public class FeedbackFragment extends CustomFragment {
         radiusTextView = view.findViewById(R.id.radiusTextViewFeedbackFragID);
         radiusTextView.setText(activity.getResources().getString(R.string.radius_message, defaultRadius));
         radiusSeekBar = view.findViewById(R.id.radiusSeekBarFeedbackFragID);
+        alternativeRoutesButton = view.findViewById(R.id.alternativeRoutesBttnID);
     }
 
     private void initialiseSpinners() {
@@ -226,6 +228,26 @@ public class FeedbackFragment extends CustomFragment {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 defaultRadius = seekBar.getProgress() + minimumValue;
+            }
+        });
+    }
+
+    private void initialiseAlternativeRoutesButton() {
+        alternativeRoutesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Utils.makeShortToast(getContext(),"Functionality not implemented yet");
+//                String url = "https://usg-demo-4.sb.dfki.de:30101/service/gtfsld/" +
+//                        "api/v1/providers/{provider}/stops/nearBy?" +
+//                        "lat={lat}&lng={lng}&radius={radius}&size={size}&page={page}";
+//                Map<String, String> params = new HashMap<>();
+//                params.put("provider", "flixbus");
+//                params.put("lat", String.valueOf(feedback.getLocation().getLat()));
+//                params.put("lng", String.valueOf(feedback.getLocation().getLng()));
+//                params.put("radius", String.valueOf((feedback.getRadius() * 100000)));
+//                params.put("size", String.valueOf(25));
+//                params.put("page", String.valueOf(1));
+//                Utils.postToGTFSLD(getContext(), null, url, null, null, params, "Successfull", "failure");
             }
         });
     }

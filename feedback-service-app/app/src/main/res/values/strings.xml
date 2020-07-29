@@ -9,7 +9,7 @@
         <item>bus</item>
         <item>train</item>
         <item>car</item>
-        <item>bicycle</item>
+        <item>bike</item>
         <item>foot</item>
     </array>
     <string name="app_name">Feedback Service</string>
