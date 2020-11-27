@@ -127,6 +127,12 @@ above the local reference ellipsoid).""" ;
 #    Data properties
 #################################################################
 
+###  http://www.dfki.de/SmartMaaS/feedback#address
+:address rdf:type owl:DatatypeProperty ;
+         rdfs:domain :Location ;
+         rdfs:range xsd:string .
+
+
 ###  http://www.dfki.de/SmartMaaS/feedback#givenBy
 :givenBy rdf:type owl:DatatypeProperty ;
          rdfs:domain :OtherReason ;
