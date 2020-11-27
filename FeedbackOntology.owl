@@ -198,7 +198,8 @@ above the local reference ellipsoid).""" ;
 
 
 ###  http://www.dfki.de/SmartMaaS/feedback#Location
-:Location rdf:type owl:Class .
+:Location rdf:type owl:Class ;
+          rdfs:subClassOf <http://www.w3.org/2003/01/geo/wgs84_pos#SpatialThing> .
 
 
 ###  http://www.dfki.de/SmartMaaS/feedback#OtherReason
