@@ -139,6 +139,20 @@ above the local reference ellipsoid).""" ;
          rdfs:range xsd:string .
 
 
+###  http://www.dfki.de/SmartMaaS/feedback#line
+:line rdf:type owl:DatatypeProperty ;
+      rdfs:domain :Bus ,
+                  :Train ;
+      rdfs:range xsd:string .
+
+
+###  http://www.dfki.de/SmartMaaS/feedback#vehicleNumber
+:vehicleNumber rdf:type owl:DatatypeProperty ;
+               rdfs:domain :Bus ,
+                           :Train ;
+               rdfs:range xsd:string .
+
+
 #################################################################
 #    Classes
 #################################################################
