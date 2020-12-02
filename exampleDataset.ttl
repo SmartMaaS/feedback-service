@@ -1,0 +1,415 @@
+@prefix : 		<http://www.dfki.de/SmartMaaS/feedback#> .
+@prefix owl: 	<http://www.w3.org/2002/07/owl#> .
+@prefix rdf: 	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: 	<http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: 	<http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs:	<http://www.w3.org/2000/01/rdf-schema#> .
+@prefix time:	<http://www.w3.org/2006/time#> .
+@prefix geo:	<http://www.w3.org/2003/01/geo/wgs84_pos#> .
+@prefix foaf:	<http://xmlns.com/foaf/spec/> .
+@base <http://www.dfki.de/SmartMaaS/feedback> .
+
+
+##########################
+:Feedback1 
+	rdf:type :Feedback;
+	:submittedBy [
+		foaf:accountName "user1"
+	];
+	:becauseOf	[ a :PassingReason, :TrafficJam],
+				[ a :PermanentReason, :Pothole];
+
+	:hasTimestamp [
+		time:xsdDateTime "CCYY-MM-DDThh:mm:ss.sss"^^xsd:dateTime ;
+		:timeStampOf :Feedback1
+	];
+	:causedDelay [
+		time:hasXSDDuration ""^^xsd:Duration
+	];
+	:atLocation [
+		:locationOf :Feedback1;
+		geo:long "12.34";
+		geo:lat "2.34";
+		:Address "adress"^^xsd:string
+	];
+	:affects [
+		a :Bus;
+		:affectedBy :Feedback1;
+		:Line "BusLine"^^xsd:string
+	] .
+
+##########################
+:Feedback2 
+	rdf:type :Feedback;
+	:submittedBy [
+		foaf:accountName "user2"
+	];
+	:becauseOf 
+		[ a  :FailingInfoBoard, :PermanentReason
+		];
+	:hasTimestamp [
+		time:xsdDateTime "CCYY-MM-DDThh:mm:ss.sss"^^xsd:dateTime ;
+		:timeStampOf :Feedback2
+	];
+	:causedDelay [
+		time:hasXSDDuration ""^^xsd:Duration
+	];
+	:atLocation [
+		:locationOf :Feedback2;
+		geo:long "12.34";
+		geo:lat "2.34";
+		:Address "adress"^^xsd:string
+	];
+	:affects [
+		a :Bus;
+		:affectedBy :Feedback2;
+		:Line "BusLine"^^xsd:string
+	] .
+##########################
+:Feedback3 
+	rdf:type :Feedback;
+	:submittedBy [
+		foaf:accountName "user3"
+	];
+	:becauseOf 
+		[ a :Pothole, :PermanentReason
+		];
+	:hasTimestamp [
+		time:xsdDateTime "CCYY-MM-DDThh:mm:ss.sss"^^xsd:dateTime ;
+		:timeStampOf :Feedback3
+	];
+	:atLocation [
+		:locationOf :Feedback3;
+		geo:long "12.34";
+		geo:lat "2.34";
+		:Address "adress"^^xsd:string
+	];
+	:affects [
+		a :Bicycle;
+		:affectedBy :Feedback3;
+	] .
+##########################
+:Feedback4 
+	rdf:type :Feedback;
+	:submittedBy [
+		foaf:accountName "user4"
+	];
+	:causedDelay [
+		time:hasXSDDuration ""^^xsd:Duration
+	];
+	:hasTimestamp [
+		time:xsdDateTime "CCYY-MM-DDThh:mm:ss.sss"^^xsd:dateTime ;
+		:timeStampOf :Feedback4
+	];
+	:atLocation [
+		:locationOf :Feedback4;
+		geo:long "12.34";
+		geo:lat "2.34";
+		:Address "adress"^^xsd:string
+	];
+	:affects [
+		a :Train;
+		:affectedBy :Feedback4;
+		:Line "TL21234124";
+	] .
+	
+##########################
+:Feedback5 
+	rdf:type :Feedback;
+	:submittedBy [
+		foaf:accountName "user3"
+	];
+	:becauseOf [
+		a :Fog, :Weather, :PassingReason
+	];
+	:causedDelay [
+		time:hasXSDDuration ""^^xsd:Duration
+	];
+	:hasTimestamp [
+		time:xsdDateTime "CCYY-MM-DDThh:mm:ss.sss"^^xsd:dateTime ;
+		:timeStampOf :Feedback5
+	];
+	:atLocation [
+		:locationOf :Feedback5;
+		geo:long "12.34";
+		geo:lat "2.34";
+		:Address "adress"^^xsd:string
+	];
+	:affects [
+		a :Car;
+		:affectedBy :Feedback5;
+	] .
+	
+##########################
+:Feedback6 
+	rdf:type :Feedback;
+	:submittedBy [
+		foaf:accountName "user6"
+	];
+	:becauseOf [
+		a :Fog, :Weather, :PassingReason
+	];
+	:causedDelay [
+		time:hasXSDDuration ""^^xsd:Duration
+	];
+	:hasTimestamp [
+		time:xsdDateTime "CCYY-MM-DDThh:mm:ss.sss"^^xsd:dateTime ;
+		:timeStampOf :Feedback6
+	];
+	:atLocation [
+		:locationOf :Feedback6;
+		geo:long "12.34";
+		geo:lat "2.34";
+		:Address "adress"^^xsd:string
+	];
+	:affects [
+		a :Car;
+		:affectedBy :Feedback6;
+	] .
+
+##########################
+:Feedback7 
+	rdf:type :Feedback;
+	:submittedBy [
+		foaf:accountName "user7"
+	];
+	:becauseOf [
+		a :Fog, :Weather, :PassingReason
+	];
+	:causedDelay [
+		time:hasXSDDuration ""^^xsd:Duration
+	];
+	:hasTimestamp [
+		time:xsdDateTime "CCYY-MM-DDThh:mm:ss.sss"^^xsd:dateTime ;
+		:timeStampOf :Feedback7
+	];
+	:atLocation [
+		:locationOf :Feedback7;
+		geo:long "12.34";
+		geo:lat "2.34";
+		:Address "adress"^^xsd:string
+	];
+	:affects [
+		a :Bus;
+		:Line "3235";
+		:affectedBy :Feedback7;
+	] .
+	
+##########################
+:Feedback8 
+	rdf:type :Feedback;
+	:submittedBy [
+		foaf:accountName "user2"
+	];
+	:becauseOf [
+		a :OtherReason;
+		:givenBy "Sick passenger"
+	];
+	:causedDelay [
+		time:hasXSDDuration ""^^xsd:Duration
+	];
+	:hasTimestamp [
+		time:xsdDateTime "CCYY-MM-DDThh:mm:ss.sss"^^xsd:dateTime ;
+		:timeStampOf :Feedback8
+	];
+	:atLocation [
+		:locationOf :Feedback8;
+		geo:long "12.34";
+		geo:lat "2.34";
+		:Address "adress"^^xsd:string
+	];
+	:affects [
+		a :Bus;
+		:Line "3235";
+		:affectedBy :Feedback8;
+	] .
+##########################
+:Feedback9 
+	rdf:type :Feedback;
+	:submittedBy [
+		foaf:accountName "user9"^^xsd:string
+	];
+	:becauseOf [
+		a :Snow, :Weather, :PassingReason
+	];
+	:causedDelay [
+		time:hasXSDDuration ""^^xsd:Duration
+	];
+	:hasTimestamp [
+		time:xsdDateTime "CCYY-MM-DDThh:mm:ss.sss"^^xsd:dateTime ;
+		:timeStampOf :Feedback9
+	];
+	:atLocation [
+		:locationOf :Feedback9;
+		geo:long "12.34";
+		geo:lat "2.34";
+		:Address "adress"^^xsd:string
+	];
+	:affects [
+		a :Train;
+		:Line "3235";
+		:affectedBy :Feedback9;
+	] .
+	
+##########################
+:Feedback10 
+	rdf:type :Feedback;
+	:submittedBy [
+		foaf:accountName "user10"
+	];
+	:becauseOf [
+		a :Pothole, :PermanentReason
+	];
+	:causedDelay [
+		time:hasXSDDuration ""^^xsd:Duration
+	];
+	:hasTimestamp [
+		time:xsdDateTime "CCYY-MM-DDThh:mm:ss.sss"^^xsd:dateTime ;
+		:timeStampOf :Feedback10
+	];
+	:atLocation [
+		:locationOf :Feedback10;
+		geo:long "12.34";
+		geo:lat "2.34";
+		:Address "adress"^^xsd:string
+	];
+	:affects [
+		a :Bicycle;
+		:affectedBy :Feedback10;
+	] .
+##########################
+:Feedback11 
+	rdf:type :Feedback;
+	:submittedBy [
+		foaf:accountName "user11"
+	];
+	:becauseOf [
+		a :MalfunctioningVehicle, :PermanentReason
+	];
+	:causedDelay [
+		time:hasXSDDuration ""^^xsd:Duration
+	];
+	:hasTimestamp [
+		time:xsdDateTime "CCYY-MM-DDThh:mm:ss.sss"^^xsd:dateTime ;
+		:timeStampOf :Feedback11
+	];
+	:atLocation [
+		:locationOf :Feedback11;
+		geo:long "12.34";
+		geo:lat "2.34";
+		:Address "adress"^^xsd:string
+	];
+	:affects [
+		a :Bus;
+		:Line "124225";
+		:vehicleNumber "b24ysr";
+		:affectedBy :Feedback11;
+	] .
+	
+##########################
+:Feedback12 
+	rdf:type :Feedback;
+	:submittedBy [
+		foaf:accountName "user12"
+	];
+	:becauseOf [
+		a :MalfunctioningVehicle, :PermanentReason
+	];
+	:causedDelay [
+		time:hasXSDDuration ""^^xsd:Duration
+	];
+	:hasTimestamp [
+		time:xsdDateTime "CCYY-MM-DDThh:mm:ss.sss"^^xsd:dateTime ;
+		:timeStampOf :Feedback12
+	];
+	:atLocation [
+		:locationOf :Feedback12;
+		geo:long "12.34";
+		geo:lat "2.34";
+		:Address "adress"^^xsd:string
+	];
+	:affects [
+		a :Train;
+		:Line "T23";
+		:vehicleNumber "ewr43464";
+		:affectedBy :Feedback12;
+	] .
+	
+##########################
+:Feedback13 
+	rdf:type :Feedback;
+	:submittedBy [
+		foaf:accountName "user13"
+	];
+	:becauseOf [
+		a :PassingReason, :TrafficJam
+	];
+	:causedDelay [
+		time:hasXSDDuration ""^^xsd:Duration
+	];
+	:hasTimestamp [
+		time:xsdDateTime "CCYY-MM-DDThh:mm:ss.sss"^^xsd:dateTime ;
+		:timeStampOf :Feedback13
+	];
+	:atLocation [
+		:locationOf :Feedback13;
+		geo:long "12.34";
+		geo:lat "2.34";
+		:Address "adress"^^xsd:string
+	];
+	:affects [
+		a :Bus;
+		:Line "T23";
+		:affectedBy :Feedback13;
+	] .
+
+##########################
+:Feedback14 
+	rdf:type :Feedback;
+	:submittedBy [
+		foaf:accountName "user14"
+	];
+	:becauseOf [a :PassingReason, :Weather, :Rain],
+			   [a :OtherReason; :givenBy "Bike lane flooded"];
+	:hasTimestamp [
+		time:xsdDateTime "CCYY-MM-DDThh:mm:ss.sss"^^xsd:dateTime ;
+		:timeStampOf :Feedback14
+	];
+	:atLocation [
+		:locationOf :Feedback14;
+		geo:long "12.34";
+		geo:lat "2.34";
+		:Address "adress"^^xsd:string
+	];
+	:affects [
+		a :Bicycle;
+		:affectedBy :Feedback14;
+	] .
+	
+##########################
+:Feedback15 
+	rdf:type :Feedback;
+	:submittedBy [
+		foaf:accountName "user3"
+	];
+	:becauseOf [
+		a :PassingReason, :Weather, :Rain
+	];			  
+	:causedDelay [
+		time:hasXSDDuration ""^^xsd:Duration
+	];
+	:hasTimestamp [
+		time:xsdDateTime "CCYY-MM-DDThh:mm:ss.sss"^^xsd:dateTime ;
+		:timeStampOf :Feedback15
+	];
+	:atLocation [
+		:locationOf :Feedback15;
+		geo:long "12.34";
+		geo:lat "2.34";
+		:Address "adress"^^xsd:string
+	];
+	:affects [
+		a :Bus;
+		:Line "T23";
+		:affectedBy :Feedback15;
+	] .
