@@ -7,7 +7,8 @@
 @base <http://www.dfki.de/SmartMaaS/feedback> .
 
 <http://www.dfki.de/SmartMaaS/feedback> rdf:type owl:Ontology ;
-                                         owl:imports <http://www.w3.org/2006/time#2016> .
+                                         owl:imports <http://www.w3.org/2006/time#2016> ,
+                                                     <http://xmlns.com/foaf/0.1/> .
 
 #################################################################
 #    Annotation properties
