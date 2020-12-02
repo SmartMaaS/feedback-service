@@ -112,6 +112,12 @@ above the local reference ellipsoid).""" ;
             rdfs:range :Feedback .
 
 
+###  http://www.dfki.de/SmartMaaS/feedback#submittedBy
+:submittedBy rdf:type owl:ObjectProperty ;
+             rdfs:domain :Feedback ;
+             rdfs:range <http://www.w3.org/2000/10/swap/pim/contact#Person> .
+
+
 ###  http://www.dfki.de/SmartMaaS/feedback#timestampOf
 :timestampOf rdf:type owl:ObjectProperty ,
                       owl:FunctionalProperty ,
