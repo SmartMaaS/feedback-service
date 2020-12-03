@@ -84,6 +84,7 @@ above the local reference ellipsoid).""" ;
 
 ###  http://www.dfki.de/SmartMaaS/feedback#becauseOf
 :becauseOf rdf:type owl:ObjectProperty ;
+           owl:inverseOf :reasonFor ;
            rdfs:domain :Feedback ;
            rdfs:range :Reason .
 
@@ -109,6 +110,12 @@ above the local reference ellipsoid).""" ;
             rdfs:subPropertyOf owl:topObjectProperty ;
             rdfs:domain :Location ;
             rdfs:range :Feedback .
+
+
+###  http://www.dfki.de/SmartMaaS/feedback#reasonFor
+:reasonFor rdf:type owl:ObjectProperty ;
+           rdfs:domain :Reason ;
+           rdfs:range :Feedback .
 
 
 ###  http://www.dfki.de/SmartMaaS/feedback#submittedBy
