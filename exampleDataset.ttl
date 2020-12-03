@@ -25,7 +25,8 @@ exf:Feedback1
 		:timeStampOf exf:Feedback1
 	];
 	:causedDelay [
-		time:hasXSDDuration "PT7M"^^xsd:Duration
+		time:hasXSDDuration "PT7M"^^xsd:Duration ;
+		:delayOf exf:Feedback1
 	];
 	:atLocation [
 		:locationOf exf:Feedback1;
@@ -53,7 +54,8 @@ exf:Feedback2
 		:timeStampOf exf:Feedback2
 	];
 	:causedDelay [
-		time:hasXSDDuration "PT14M"^^xsd:Duration
+		time:hasXSDDuration "PT14M"^^xsd:Duration ;
+		:delayOf exf:Feedback2
 	];
 	:atLocation [
 		:locationOf exf:Feedback2;
@@ -96,7 +98,8 @@ exf:Feedback4
 		foaf:accountName "user4"
 	];
 	:causedDelay [
-		time:hasXSDDuration "PT1H27M"^^xsd:Duration
+		time:hasXSDDuration "PT1H27M"^^xsd:Duration ;
+		:delayOf exf:Feedback4
 	];
 	:hasTimestamp [
 		time:xsdDateTime "2020-11-27T20:23:01"^^xsd:dateTime ;
@@ -124,7 +127,8 @@ exf:Feedback5
 		a :Fog, :Weather, :PassingReason; :reasonFor exf:Feedback5
 	];
 	:causedDelay [
-		time:hasXSDDuration "PT24M"^^xsd:Duration
+		time:hasXSDDuration "PT24M"^^xsd:Duration ;
+		:delayOf exf:Feedback5
 	];
 	:hasTimestamp [
 		time:xsdDateTime "2020-11-29T07:31:12"^^xsd:dateTime ;
@@ -151,7 +155,8 @@ exf:Feedback6
 		a :Fog, :Weather, :PassingReason; :reasonFor exf:Feedback6
 	];
 	:causedDelay [
-		time:hasXSDDuration "PT20M"^^xsd:Duration
+		time:hasXSDDuration "PT20M"^^xsd:Duration ;
+		:delayOf exf:Feedback6
 	];
 	:hasTimestamp [
 		time:xsdDateTime "2020-11-29T07:34:12"^^xsd:dateTime ;
@@ -178,7 +183,8 @@ exf:Feedback7
 		a :Fog, :Weather, :PassingReason; :reasonFor exf:Feedback7
 	];
 	:causedDelay [
-		time:hasXSDDuration "PT8M"^^xsd:Duration
+		time:hasXSDDuration "PT8M"^^xsd:Duration ;
+		:delayOf exf:Feedback7
 	];
 	:hasTimestamp [
 		time:xsdDateTime "2020-11-29T07:42:25"^^xsd:dateTime ;
@@ -208,7 +214,8 @@ exf:Feedback8
 		:reasonFor exf:Feedback8
 	];
 	:causedDelay [
-		time:hasXSDDuration "PT12M24S"^^xsd:Duration
+		time:hasXSDDuration "PT12M24S"^^xsd:Duration ;
+		:delayOf exf:Feedback8
 	];
 	:hasTimestamp [
 		time:xsdDateTime "2020-11-25T13:23:04"^^xsd:dateTime ;
@@ -236,7 +243,8 @@ exf:Feedback9
 		:reasonFor exf:Feedback9
 	];
 	:causedDelay [
-		time:hasXSDDuration "PT3H46M"^^xsd:Duration
+		time:hasXSDDuration "PT3H46M"^^xsd:Duration ;
+		:delayOf exf:Feedback9
 	];
 	:hasTimestamp [
 		time:xsdDateTime "2020-12-01T06:21:12"^^xsd:dateTime ;
@@ -288,7 +296,8 @@ exf:Feedback11
 		:reasonFor exf:Feedback11
 	];
 	:causedDelay [
-		time:hasXSDDuration ""^^xsd:Duration
+		time:hasXSDDuration ""^^xsd:Duration ;
+		:delayOf exf:Feedback11
 	];
 	:hasTimestamp [
 		time:xsdDateTime "2020-11-30T17:44:21"^^xsd:dateTime ;
@@ -318,7 +327,8 @@ exf:Feedback12
 		:reasonFor exf:Feedback12
 	];
 	:causedDelay [
-		time:hasXSDDuration "PT2H02M"^^xsd:Duration
+		time:hasXSDDuration "PT2H02M"^^xsd:Duration ;
+		:delayOf exf:Feedback12
 	];
 	:hasTimestamp [
 		time:xsdDateTime "2020-11-31T12:06:00"^^xsd:dateTime ;
@@ -348,7 +358,8 @@ exf:Feedback13
 		:reasonFor exf:Feedback13
 	];
 	:causedDelay [
-		time:hasXSDDuration ""^^xsd:Duration
+		time:hasXSDDuration ""^^xsd:Duration ;
+		:delayOf exf:Feedback13
 	];
 	:hasTimestamp [
 		time:xsdDateTime "CCYY-MM-DDThh:mm:ss.sss"^^xsd:dateTime ;
@@ -398,7 +409,8 @@ exf:Feedback15
 		a :PassingReason, :Weather, :Rain; :reasonFor exf:Feedback15
 	];			  
 	:causedDelay [
-		time:hasXSDDuration "PT6M08S"^^xsd:Duration
+		time:hasXSDDuration "PT6M08S"^^xsd:Duration ;
+		:delayOf exf:Feedback15
 	];
 	:hasTimestamp [
 		time:xsdDateTime "2020-12-01T17:04:24"^^xsd:dateTime ;
