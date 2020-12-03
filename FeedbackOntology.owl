@@ -84,6 +84,7 @@ above the local reference ellipsoid).""" ;
 
 ###  http://www.dfki.de/SmartMaaS/feedback#becauseOf
 :becauseOf rdf:type owl:ObjectProperty ;
+           owl:inverseOf :reasonFor ;
            rdfs:domain :Feedback ;
            rdfs:range :Reason .
 
@@ -91,8 +92,15 @@ above the local reference ellipsoid).""" ;
 ###  http://www.dfki.de/SmartMaaS/feedback#causedDelay
 :causedDelay rdf:type owl:ObjectProperty ;
              rdfs:subPropertyOf owl:topObjectProperty ;
+             owl:inverseOf :delayOf ;
              rdfs:domain :Feedback ;
              rdfs:range <http://www.w3.org/2006/time#TemporalDuration> .
+
+
+###  http://www.dfki.de/SmartMaaS/feedback#delayOf
+:delayOf rdf:type owl:ObjectProperty ;
+         rdfs:domain <http://www.w3.org/2006/time#TemporalDuration> ;
+         rdfs:range :Feedback .
 
 
 ###  http://www.dfki.de/SmartMaaS/feedback#hasTimestamp
@@ -109,6 +117,12 @@ above the local reference ellipsoid).""" ;
             rdfs:subPropertyOf owl:topObjectProperty ;
             rdfs:domain :Location ;
             rdfs:range :Feedback .
+
+
+###  http://www.dfki.de/SmartMaaS/feedback#reasonFor
+:reasonFor rdf:type owl:ObjectProperty ;
+           rdfs:domain :Reason ;
+           rdfs:range :Feedback .
 
 
 ###  http://www.dfki.de/SmartMaaS/feedback#submittedBy
