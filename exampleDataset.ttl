@@ -1,4 +1,5 @@
 @prefix : 		<http://www.dfki.de/SmartMaaS/feedback#> .
+@prefix exf:	<http://www.example.fe/edback#> .
 @prefix owl: 	<http://www.w3.org/2002/07/owl#> .
 @prefix rdf: 	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix xml: 	<http://www.w3.org/XML/1998/namespace> .
@@ -11,7 +12,7 @@
 
 
 ##########################
-:Feedback1 
+exf:Feedback1
 	rdf:type :Feedback;
 	:submittedBy [
 		foaf:accountName "user1"
@@ -39,7 +40,7 @@
 	] .
 
 ##########################
-:Feedback2 
+exf:Feedback2
 	rdf:type :Feedback;
 	:submittedBy [
 		foaf:accountName "user2"
@@ -66,7 +67,7 @@
 		:Line "113"^^xsd:string
 	] .
 ##########################
-:Feedback3 
+exf:Feedback3
 	rdf:type :Feedback;
 	:submittedBy [
 		foaf:accountName "user3"
@@ -88,7 +89,7 @@
 		:affectedBy :Feedback3;
 	] .
 ##########################
-:Feedback4 
+exf:Feedback4
 	rdf:type :Feedback;
 	:submittedBy [
 		foaf:accountName "user4"
@@ -113,7 +114,7 @@
 	] .
 	
 ##########################
-:Feedback5 
+exf:Feedback5
 	rdf:type :Feedback;
 	:submittedBy [
 		foaf:accountName "user3"
@@ -140,7 +141,7 @@
 	] .
 	
 ##########################
-:Feedback6 
+exf:Feedback6
 	rdf:type :Feedback;
 	:submittedBy [
 		foaf:accountName "user6"
@@ -167,7 +168,7 @@
 	] .
 
 ##########################
-:Feedback7 
+exf:Feedback7
 	rdf:type :Feedback;
 	:submittedBy [
 		foaf:accountName "user7"
@@ -195,7 +196,7 @@
 	] .
 	
 ##########################
-:Feedback8 
+exf:Feedback8
 	rdf:type :Feedback;
 	:submittedBy [
 		foaf:accountName "user2"
@@ -223,7 +224,7 @@
 		:affectedBy :Feedback8;
 	] .
 ##########################
-:Feedback9 
+exf:Feedback9
 	rdf:type :Feedback;
 	:submittedBy [
 		foaf:accountName "user9"^^xsd:string
@@ -251,7 +252,7 @@
 	] .
 	
 ##########################
-:Feedback10 
+exf:Feedback10
 	rdf:type :Feedback;
 	:submittedBy [
 		foaf:accountName "user10"
@@ -273,7 +274,7 @@
 		:affectedBy :Feedback10;
 	] .
 ##########################
-:Feedback11 
+exf:Feedback11
 	rdf:type :Feedback;
 	:submittedBy [
 		foaf:accountName "user11"
@@ -302,7 +303,7 @@
 	] .
 	
 ##########################
-:Feedback12 
+exf:Feedback12
 	rdf:type :Feedback;
 	:submittedBy [
 		foaf:accountName "user12"
@@ -331,7 +332,7 @@
 	] .
 	
 ##########################
-:Feedback13 
+exf:Feedback13
 	rdf:type :Feedback;
 	:submittedBy [
 		foaf:accountName "user13"
@@ -359,7 +360,7 @@
 	] .
 
 ##########################
-:Feedback14 
+exf:Feedback14
 	rdf:type :Feedback;
 	:submittedBy [
 		foaf:accountName "user14"
@@ -381,7 +382,7 @@
 	] .
 	
 ##########################
-:Feedback15 
+exf:Feedback15
 	rdf:type :Feedback;
 	:submittedBy [
 		foaf:accountName "user3"
