@@ -92,8 +92,15 @@ above the local reference ellipsoid).""" ;
 ###  http://www.dfki.de/SmartMaaS/feedback#causedDelay
 :causedDelay rdf:type owl:ObjectProperty ;
              rdfs:subPropertyOf owl:topObjectProperty ;
+             owl:inverseOf :delayOf ;
              rdfs:domain :Feedback ;
              rdfs:range <http://www.w3.org/2006/time#TemporalDuration> .
+
+
+###  http://www.dfki.de/SmartMaaS/feedback#delayOf
+:delayOf rdf:type owl:ObjectProperty ;
+         rdfs:domain <http://www.w3.org/2006/time#TemporalDuration> ;
+         rdfs:range :Feedback .
 
 
 ###  http://www.dfki.de/SmartMaaS/feedback#hasTimestamp
