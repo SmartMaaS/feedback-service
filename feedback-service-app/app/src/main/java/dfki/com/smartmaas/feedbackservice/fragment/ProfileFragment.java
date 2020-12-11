@@ -13,16 +13,16 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-import com.google.firebase.auth.FirebaseAuth;
-
 import dfki.com.smartmaas.feedbackservice.R;
 import dfki.com.smartmaas.feedbackservice.activity.MainActivity;
 import dfki.com.smartmaas.feedbackservice.model.CustomFragment;
 import dfki.com.smartmaas.feedbackservice.util.Utils;
 
+//import com.google.firebase.auth.FirebaseAuth;
+
 
 public class ProfileFragment extends CustomFragment {
-    private static final String tag = "ProfileFragment";
+    private static final String TAG = ProfileFragment.class.getName();
     private Button logOutButton;
     private SharedPreferences sharedPreferences;
     private MainActivity activity;
@@ -59,9 +59,9 @@ public class ProfileFragment extends CustomFragment {
         logOutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FirebaseAuth.getInstance().signOut();
-                sharedPreferences.edit().clear().apply();
-                openLoginFragment();
+//                FirebaseAuth.getInstance().signOut();
+//                sharedPreferences.edit().clear().apply();
+//                openLoginFragment();
             }
         });
     }
@@ -75,6 +75,6 @@ public class ProfileFragment extends CustomFragment {
 
     @Override
     public String getCustomTAG() {
-        return tag;
+        return TAG;
     }
 }

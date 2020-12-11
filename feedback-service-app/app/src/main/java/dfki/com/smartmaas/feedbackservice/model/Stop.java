@@ -1,7 +1,7 @@
 package dfki.com.smartmaas.feedbackservice.model;
 
 public class Stop implements Comparable<Stop> {
-    private static final String tag = "Stop";
+    private static final String TAG = Stop.class.getName();
     private String url;
     private String description;
     private String identifier;
@@ -100,6 +100,6 @@ public class Stop implements Comparable<Stop> {
     }
 
     public static String getTag() {
-        return tag;
+        return TAG;
     }
 }

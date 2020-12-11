@@ -1,8 +1,12 @@
 package de.dfki.feedback_service.feedback_webservice.models;
 
+//@ApiModel(description = "Address of the Feedback Model")
 public class Location {
+    //    @ApiModelProperty(notes = "Name of the Address", example = "Waldhausweg 17, 66123 Saarbrucken")
     private String name;
+    //    @ApiModelProperty(notes = "Latitude of the Address", example = "49.244710")
     private double lat;
+    //    @ApiModelProperty(notes = "Longitude of the Address", example = "7.021740")
     private double lng;
 
     public Location() {

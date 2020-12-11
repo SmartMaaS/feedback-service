@@ -10,7 +10,6 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -28,8 +27,8 @@ import dfki.com.smartmaas.feedbackservice.model.Stop;
 import dfki.com.smartmaas.feedbackservice.service.FirebaseMessagingService;
 import dfki.com.smartmaas.feedbackservice.util.Utils;
 
-public class ActivityStops extends AppCompatActivity implements Inotification {
-    private final static String tag = "ActivityStops";
+public class ActivityStops extends BaseActivity implements Inotification {
+    private final static String TAG = ActivityStops.class.getName();
     private TextView nearbyStopsTitleTextView, loadMoreTextView;
     private RecyclerView recyclerView;
     private FirebaseMessage firebaseMessage;
@@ -43,6 +42,8 @@ public class ActivityStops extends AppCompatActivity implements Inotification {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
         setContentView(R.layout.activity_stops);
         initialiseViews();
         gson = new Gson();
@@ -151,17 +152,14 @@ public class ActivityStops extends AppCompatActivity implements Inotification {
         lastPressedTextView = (TextView) view;
     }
 
-    public void loadMoreOnClick(View view) {
+    public void loadMoreOnClick(View view)  {
         FirebaseMessagingService.inotification = this;
         loadMoreProgBar.setVisibility(View.VISIBLE);
         loadMoreTextView.setVisibility(View.GONE);
         String size = Utils.fetchStringFromPreferences(getApplicationContext(), getResources().getString(R.string.size_SH_PR_key));
-        String radius = Utils.fetchStringFromPreferences(getApplicationContext(),
-                getResources().getString(R.string.nearby_stops_radius_SH_PR_key));
         String feedbackJson = Utils.fetchStringFromPreferences(getApplicationContext(),
                 getResources().getString(R.string.feedback_object_SH_PR_key));
         Feedback feedback = new Gson().fromJson(feedbackJson, Feedback.class);
-        feedback.setRadius(Integer.parseInt(radius));
         String page = Utils.fetchStringFromPreferences(this,
                 getResources().getString(R.string.latest_page_SH_PR_key));
 
@@ -175,7 +173,7 @@ public class ActivityStops extends AppCompatActivity implements Inotification {
 
 
         Utils.postToFeedbWS(this,
-                feedback.getRDFOutput(getResources().getStringArray(R.array.formats)[0]),
+                feedback.getRDFModel(),
                 getResources().getString(R.string.feedback_web_service_url),
                 getResources().getStringArray(R.array.content_types)[2], headers,
                 getResources().getString(R.string.more_stops_success_message, size),

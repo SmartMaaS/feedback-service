@@ -9,17 +9,12 @@ import android.view.MenuItem;
 import android.view.View;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.bikcrum.locationupdate.LocationUpdate;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.InstanceIdResult;
 
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEventListener;
@@ -37,8 +32,13 @@ import dfki.com.smartmaas.feedbackservice.intrface.FragmentController;
 import dfki.com.smartmaas.feedbackservice.model.CustomFragment;
 import dfki.com.smartmaas.feedbackservice.util.Utils;
 
-public class MainActivity extends AppCompatActivity implements FragmentController, LocationUpdate.OnLocationUpdatedListener {
-    private static final String tag = "MainActivity";
+//import com.google.android.gms.tasks.OnCompleteListener;
+//import com.google.android.gms.tasks.Task;
+//import com.google.firebase.iid.FirebaseInstanceId;
+//import com.google.firebase.iid.InstanceIdResult;
+
+public class MainActivity extends BaseActivity implements FragmentController, LocationUpdate.OnLocationUpdatedListener {
+    private static final String TAG = MainActivity.class.getName();
     private final FragmentManager fragmentManager = getSupportFragmentManager();
     private FragmentTransaction fragmentTransaction;
     private final FeedbackFragment feedbackFragment = new FeedbackFragment();
@@ -54,23 +54,25 @@ public class MainActivity extends AppCompatActivity implements FragmentControlle
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
         setContentView(R.layout.activity_main);
-        FirebaseInstanceId.getInstance().getInstanceId()
-                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
-                        if (!task.isSuccessful()) {
-                            Log.w(tag, getResources().getString(
-                                    R.string.firebase_unsuccess_message), task.getException());
-                            return;
-                        }
-                        if (task.getResult() != null) {
-                            String token = task.getResult().getToken();
-                            Utils.saveStringToPreferences(getApplicationContext(),
-                                    getResources().getString(R.string.firebase_token_SH_PR_key), token);
-                        }
-                    }
-                });
+//        FirebaseInstanceId.getInstance().getInstanceId()
+//                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+//                        if (!task.isSuccessful()) {
+//                            Log.w(tag, getResources().getString(
+//                                    R.string.firebase_unsuccess_message), task.getException());
+//                            return;
+//                        }
+//                        if (task.getResult() != null) {
+//                            String token = task.getResult().getToken();
+//                            Utils.saveStringToPreferences(getApplicationContext(),
+//                                    getResources().getString(R.string.firebase_token_SH_PR_key), token);
+//                        }
+//                    }
+//                });
         initialiseLocationUpdate(savedInstanceState);
         initialiseBottomNavigationView();
         initialisePreliminaryFragment();
@@ -274,12 +276,15 @@ public class MainActivity extends AppCompatActivity implements FragmentControlle
         } else {
             this.location = new dfki.com.smartmaas.feedbackservice.model.Location();
         }
+        this.location.setLat(lat);
+        this.location.setLng(lng);
         try {
-            this.location.setLat(lat);
-            this.location.setLng(lng);
             this.location.setName(Utils.convertLatLongToAddress(lat, lng, this));
         } catch (IOException e) {
             e.printStackTrace();
+            Utils.makeShortToast(getApplicationContext(), "Current location couldn't be identified. " +
+                    "Latitude(" + lat + ") and longitude(" + lng + ") cannot be converted to an address name.");
+            Log.e(TAG, "Latitude(" + lat + ") and longitude(" + lng + ") cannot be converted to an address name.");
         }
         locationUpdate.stopLocationUpdates();
         feedbackFragment.setLocation(this.location);

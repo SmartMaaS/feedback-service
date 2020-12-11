@@ -18,7 +18,7 @@ import dfki.com.smartmaas.feedbackservice.util.Utils;
 
 
 public class PreliminaryFragment extends CustomFragment {
-    private final static String tag = "PreliminaryFragment";
+    private final static String TAG = PreliminaryFragment.class.getName();
     private TextView continueTxVw;
     private MainActivity activity;
     private ConstraintLayout navigationMenu;
@@ -56,6 +56,6 @@ public class PreliminaryFragment extends CustomFragment {
 
     @Override
     public String getCustomTAG() {
-        return tag;
+        return TAG;
     }
 }

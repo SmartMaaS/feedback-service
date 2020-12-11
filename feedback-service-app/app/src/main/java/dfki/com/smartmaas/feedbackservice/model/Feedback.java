@@ -1,59 +1,63 @@
 package dfki.com.smartmaas.feedbackservice.model;
 
-import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdf.model.ModelFactory;
-import org.apache.jena.rdf.model.Property;
-import org.apache.jena.rdf.model.Resource;
-import org.apache.jena.riot.RDFFormat;
-import org.apache.jena.vocabulary.RDF;
 import org.eclipse.rdf4j.model.IRI;
-import org.eclipse.rdf4j.model.Literal;
-import org.eclipse.rdf4j.model.Namespace;
-import org.eclipse.rdf4j.model.Statement;
 import org.eclipse.rdf4j.model.ValueFactory;
-import org.eclipse.rdf4j.model.impl.LinkedHashModel;
-import org.eclipse.rdf4j.model.impl.SimpleNamespace;
 import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
+import org.eclipse.rdf4j.model.util.ModelBuilder;
+import org.eclipse.rdf4j.model.util.RDFCollections;
+import org.eclipse.rdf4j.rio.Rio;
+import org.eclipse.rdf4j.rio.turtle.TurtleWriter;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 
-import java.io.StringWriter;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.List;
+
 
 @Root
 public class Feedback {
-    private static final String tag = "Feedback";
+    private static final String TAG = Feedback.class.getName();
     private String feedbackURI = "http://www.example.com/feedback";
     @Element
     private Location location;
     @Element
     private int stuckTime;
     @Element
-    private String measurementUnit;
+    private String timeMeasurementUnit;
     @Element
     private String vehicle;
     @Element
     private String vehicleNo;
+    @Element
+    private String dateTime;
     @ElementList
     private List<Reason> reasons;
     @Element
-    private int radius;
+    private final String distanceMeasurementUnit = "km";
 
-    public Feedback(Location location, int stuckTime, String measurementUnit, String vehicle, String vehicleNo) {
+    public Feedback(Location location, int stuckTime, String timeMeasurementUnit, String vehicle, String vehicleNo, String date) {
         this.location = location;
         this.stuckTime = stuckTime;
-        this.measurementUnit = measurementUnit;
+        this.timeMeasurementUnit = timeMeasurementUnit;
         this.vehicle = vehicle;
         this.vehicleNo = vehicleNo;
+        this.dateTime = date;
     }
 
-    public int getRadius() {
-        return radius;
+    public String getTimeMeasurementUnit() {
+        return timeMeasurementUnit;
     }
 
-    public void setRadius(int radius) {
-        this.radius = radius;
+    public void setTimeMeasurementUnit(String timeMeasurementUnit) {
+        this.timeMeasurementUnit = timeMeasurementUnit;
+    }
+
+    public String getDistanceMeasurementUnit() {
+        return distanceMeasurementUnit;
     }
 
     public int getStuckTime() {
@@ -62,14 +66,6 @@ public class Feedback {
 
     public void setStuckTime(int stuckTime) {
         this.stuckTime = stuckTime;
-    }
-
-    public String getMeasurementUnit() {
-        return measurementUnit;
-    }
-
-    public void setMeasurementUnit(String measurementUnit) {
-        this.measurementUnit = measurementUnit;
     }
 
     public Location getLocation() {
@@ -112,77 +108,112 @@ public class Feedback {
         this.feedbackURI = feedbackURI;
     }
 
-    public void getRDFForm(RDFFormat rdfFormat) {
-        org.eclipse.rdf4j.model.Model model = new LinkedHashModel();
-        ValueFactory valueFactory = SimpleValueFactory.getInstance();
-
-        Namespace feedbackNamespace = new SimpleNamespace("feedback", "http://example.org/feedback/");
-        IRI feedback = valueFactory.createIRI(feedbackNamespace.getName());
-        IRI geo = valueFactory.createIRI(feedbackNamespace.getName() + "location");
-        IRI ns3 = valueFactory.createIRI(feedbackNamespace.getName() + "stuck_duration");
-        IRI vhc = valueFactory.createIRI(feedbackNamespace.getName() + "travelsOn");
-        IRI cse = valueFactory.createIRI(feedbackNamespace.getName() + "because_of");
-        IRI rsn = valueFactory.createIRI(feedbackNamespace.getName() + "reasons");
-        IRI lcnn = valueFactory.createIRI(feedbackNamespace.getName() + "name");
-        IRI lcnlg = valueFactory.createIRI(feedbackNamespace.getName() + "lat");
-        IRI lcnlt = valueFactory.createIRI(feedbackNamespace.getName() + "long");
-        IRI emotion = valueFactory.createIRI(feedbackNamespace.getName() + "radius");
-
-        Literal location = valueFactory.createLiteral(getLocation().getName());
-
-
-
-        Statement statement = valueFactory.createStatement(feedback, lcnn, location);
-
-
+    public static String getTag() {
+        return TAG;
     }
 
-    public String getRDFOutput(String rdfOutputFormat) {
+    public String getDateTime() {
+        return dateTime;
+    }
 
-        Model model = ModelFactory.createDefaultModel();
-        Property geo = model.createProperty("https://www.w3.org/2003/01/geo/wgs84_pos#", "location");
-        Property ns3 = model.createProperty("http://purl.org/NET/c4dm/timeline.owl#", "stuck_duration");
-        Property vhc = model.createProperty("http://purl.org/dc/elements/1.1/", "travelsOn");
-        Property cse = model.createProperty("http://dublincore.org/documents/dces/", "because_of");
-        Property rsn = model.createProperty("http://www.w3.org/2002/07/owl#", "reasons");
-        Property lcnn = model.createProperty("https://www.w3.org/2003/01/geo/wgs84_pos#", "name");
-        Property lcnlg = model.createProperty("https://www.w3.org/2003/01/geo/wgs84_pos#", "lat");
-        Property lcnlt = model.createProperty("https://www.w3.org/2003/01/geo/wgs84_pos#", "long");
-        Property emotion = model.createProperty("http://ns.inria.fr/emoca/#", "radius");
+    public void setDateTime(String dateTime) {
+        this.dateTime = dateTime;
+    }
 
-        Resource reasons = model.createResource(RDF.List);
-        for (Reason reason : getReasons()) {
-            reasons.addProperty(cse, reason.getName());
+    public String getRDFModel() {
+
+        String duration = "P";
+        if (getTimeMeasurementUnit().equalsIgnoreCase("Day")
+                || getTimeMeasurementUnit().equalsIgnoreCase("Month")
+                || getTimeMeasurementUnit().equalsIgnoreCase("Year")) {
+            duration += getStuckTime() + getTimeMeasurementUnit().charAt(0);
+        } else {
+            duration += "T" + getStuckTime() + getTimeMeasurementUnit().charAt(0);
+        }
+        duration = duration.toUpperCase();
+
+        ValueFactory vf = SimpleValueFactory.getInstance();
+        ModelBuilder modelBuilder = new ModelBuilder();
+
+        String base = "http://www.dfki.de/SmartMaaS/feedback/";
+        modelBuilder.setNamespace("base", "http://www.dfki.de/SmartMaaS/feedback#")
+                .setNamespace("owl", "http://www.w3.org/2002/07/owl#")
+                .setNamespace("rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#")
+                .setNamespace("xml", "http://www.w3.org/XML/1998/namespace#")
+                .setNamespace("xsd", "http://www.w3.org/2001/XMLSchema#")
+                .setNamespace("rdfs", "http://www.w3.org/2000/01/rdf-schema#")
+                .setNamespace("time", "http://www.w3.org/2006/time#")
+                .setNamespace("geo", "http://www.w3.org/2003/01/geo/wgs84_pos#");
+
+
+        org.eclipse.rdf4j.model.Resource reasonsHead = vf.createBNode();
+        org.eclipse.rdf4j.model.Resource timeStampHead = vf.createBNode();
+        org.eclipse.rdf4j.model.Resource delayHead = vf.createBNode();
+        org.eclipse.rdf4j.model.Resource locationHead = vf.createBNode();
+        org.eclipse.rdf4j.model.Resource vehicleHead = vf.createBNode();
+
+        String feedbackID = "Feedback_xxx";
+        /* !!!!!!
+         Feedback app is unaware of the amount of feedback messages in feedback repository.
+         Therefore, instead of a correct Feedback ID, we write "Feedback_xxx" which is replaced with the correct
+         Feedback ID in feedback service.
+        */
+        modelBuilder.subject("base:" + feedbackID)
+                .add(org.eclipse.rdf4j.model.vocabulary.RDF.TYPE, "base:Feedback")
+                .add("base:hasTimestamp", timeStampHead)
+                .subject(timeStampHead)
+                .add("time:xsdDateTime", getDateTime())
+                .add("base:timeStampOf", "base:" + feedbackID)
+                .subject("base:" + feedbackID)
+                .add("base:causedDelay", delayHead)
+                .subject(delayHead)
+                .add("time:hasCSDDuration", duration)
+                .subject("base:" + feedbackID)
+                .add("base:atLocation", locationHead)
+                .subject(locationHead)
+                .add("base:locationOf", "base:" + feedbackID)
+                .add("geo:long", getLocation().getLng())
+                .add("geo:lat", getLocation().getLat())
+                .add("base:Address", getLocation().getName())
+                .subject("base:" + feedbackID)
+                .add("base:affects", vehicleHead)
+                .subject(vehicleHead)
+                .add(org.eclipse.rdf4j.model.vocabulary.RDF.TYPE, "base:" + getVehicle())
+                .add("base:affectedBy", "base:" + feedbackID)
+                .add("base:Line", getVehicleNo())
+                .subject("base:" + feedbackID)
+                .add("base:becauseOf", reasonsHead);
+
+        List<IRI> reasonIRIs = new ArrayList<>();
+        for (Reason r : getReasons()) {
+            if (r.getName().equals("Other")) {
+                reasonIRIs.add(vf.createIRI(base, r.getAdditionalInfo()));
+            } else
+                reasonIRIs.add(vf.createIRI(base, r.getName()));
+        }
+        List<org.eclipse.rdf4j.model.Statement> statements =
+                RDFCollections.asRDF(reasonIRIs, reasonsHead, new ArrayList<>());
+
+        org.eclipse.rdf4j.model.Model feedbackModel = modelBuilder.build();
+
+        feedbackModel.addAll(statements);
+
+        String modelAsString = null;
+        try {
+            OutputStream outputStream = new ByteArrayOutputStream();
+            TurtleWriter turtleWriter = new TurtleWriter(outputStream);
+            Rio.write(feedbackModel, turtleWriter);
+            modelAsString = outputStream.toString();
+            outputStream.close();
+
+            /*
+            Since rdf4j-rio-turtle library produces duplicate class error when added in gradle, it is added as a
+            jar library.
+            */
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
         }
 
-        Resource location = model.createResource();
-        location.addProperty(lcnn, getLocation().getName());
-        location.addProperty(lcnlt, String.valueOf(getLocation().getLat()));
-        location.addProperty(lcnlg, String.valueOf(getLocation().getLng()));
-
-        model.createResource(getFeedbackURI())
-                .addProperty(geo, location)
-                .addProperty(ns3, getMeasurementUnit())
-                .addProperty(ns3, String.valueOf(getStuckTime()))
-                .addProperty(vhc, getVehicleNo())
-                .addProperty(vhc, getVehicle())
-                .addProperty(rsn, reasons)
-                .addProperty(emotion, String.valueOf(getRadius()));
-
-        model.setNsPrefix(RDF.List.getLocalName(), RDF.List.getNameSpace());
-        model.setNsPrefix("owl", rsn.getNameSpace());
-        model.setNsPrefix("cse", cse.getNameSpace());
-        model.setNsPrefix("vhc", vhc.getNameSpace());
-        model.setNsPrefix("geo", geo.getNameSpace());
-        model.setNsPrefix("ns3", ns3.getNameSpace());
-        model.setNsPrefix("emotion", emotion.getNameSpace());
-        StringWriter out = new StringWriter();
-        model.write(out, rdfOutputFormat);
-//        System.out.println("String.valueOf(out) = " + String.valueOf(out));
-        return String.valueOf(out);
-    }
-
-    public static String getTag() {
-        return tag;
+        return modelAsString;
     }
 }

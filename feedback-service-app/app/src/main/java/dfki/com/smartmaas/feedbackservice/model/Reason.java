@@ -1,7 +1,7 @@
 package dfki.com.smartmaas.feedbackservice.model;
 
 public class Reason {
-    private static final String tag = "Reason";
+    private static final String TAG = Reason.class.getName();
     private String name;
     private String additionalInfo;
 
@@ -26,6 +26,6 @@ public class Reason {
     }
 
     public static String getTag() {
-        return tag;
+        return TAG;
     }
 }

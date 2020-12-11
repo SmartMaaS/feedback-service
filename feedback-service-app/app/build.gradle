@@ -46,18 +46,21 @@ android {
 }
 
 dependencies {
-    implementation "org.eclipse.rdf4j:rdf4j-model:$rdf4jVersion"
+    // RDF4J
+    implementation 'org.eclipse.rdf4j:rdf4j-model:3.5.0-M1'
+    implementation 'org.eclipse.rdf4j:rdf4j-rio:3.5.0-M1'
+    implementation 'javax.xml.bind:jaxb-api:2.4.0-b180830.0359'
+
+
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation 'org.slf4j:slf4j-nop:1.7.30'
-    implementation 'org.apache.jena:jena-arq:3.15.0'
     implementation 'net.yslibrary.keyboardvisibilityevent:keyboardvisibilityevent:2.1.0'
     implementation('org.simpleframework:simple-xml:2.7.1') {
         exclude module: 'stax'
         exclude module: 'stax-api'
         exclude module: 'xpp3'
     }
-    implementation 'com.google.firebase:firebase-analytics:17.4.4'
-    implementation 'com.google.firebase:firebase-messaging:20.2.3'
+
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'com.android.volley:volley:1.1.0'
@@ -65,13 +68,16 @@ dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-annotations:2.11.1'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.11.1'
     implementation 'com.github.bikcrum:LocationUpdate:2.0.0'
-    implementation 'com.google.android.material:material:1.1.0'
+    implementation 'com.google.android.material:material:1.2.1'
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
-    implementation 'com.google.firebase:firebase-auth:19.3.2'
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+    implementation files('libs/rdf4j-rio-turtle-3.5.0-M1.jar')
+    implementation files('libs/rdf4j-rio-api-3.5.0-M1.jar')
     testImplementation 'junit:junit:4.13'
-    androidTestImplementation 'androidx.test:runner:1.2.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    androidTestImplementation 'androidx.test:runner:1.3.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     apply plugin: 'com.google.gms.google-services'
+
+
 }

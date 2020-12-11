@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,9 +15,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.SeekBar;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -41,17 +40,14 @@ import dfki.com.smartmaas.feedbackservice.model.Reason;
 import dfki.com.smartmaas.feedbackservice.util.Utils;
 
 public class FeedbackFragment extends CustomFragment {
-    private static final String tag = "FeedbackFragment";
+    private static final String TAG = FeedbackFragment.class.getName();
     private Spinner measurementSpinner, vehicleSpinner;
     private ImageButton currentLocationBtn;
     private EditText stuckEditText, locationEditText, otherReasonEditText, vehicleNoEditText;
-    private CheckBox rainChB, crashChB, brokenTrLightChB, maintenanceChB, trafficJamChB, otherChB;
-    private Button submitButton, cleanButton, alternativeRoutesButton;
+    private CheckBox rainChB, snowChB, brokenTrLightChB, fogChB, trafficJamChB, otherChB, potholeChB, failingBoardChB, detourChB;
+    private Button submitButton, cleanButton;
     private Feedback feedback;
     private Location location;
-    private TextView radiusTextView;
-    private SeekBar radiusSeekBar;
-    private int defaultRadius = 10;
     private MainActivity activity;
 
     @Override
@@ -75,33 +71,34 @@ public class FeedbackFragment extends CustomFragment {
         initialiseCleanButton();
         initialiseCurrentLocationButton();
         initialiseOtherCheckBox();
-        initialiseSeekBar();
-        initialiseAlternativeRoutesButton();
         Utils.requestFocusAndShowKeyboard(getContext(), stuckEditText);
 
         return view;
     }
 
+    private void initializeCheckBoxes(View view) {
+        rainChB = view.findViewById(R.id.rainCheckBox);
+        fogChB = view.findViewById(R.id.fogCheckBox);
+        brokenTrLightChB = view.findViewById(R.id.brokenLightCheckBox);
+        snowChB = view.findViewById(R.id.snowCheckBox);
+        trafficJamChB = view.findViewById(R.id.trafficJamCheckBox);
+        otherChB = view.findViewById(R.id.otherCheckBox);
+        detourChB = view.findViewById(R.id.detourCheckBox);
+        failingBoardChB = view.findViewById(R.id.failingBoardCheckBox);
+        potholeChB = view.findViewById(R.id.potholeCheckBox);
+    }
+
     private void initialiseViews(View view) {
+        initializeCheckBoxes(view);
         stuckEditText = view.findViewById(R.id.stuckEditText);
         measurementSpinner = view.findViewById(R.id.measurementSpinner);
         vehicleSpinner = view.findViewById(R.id.vehicleSpinner);
-        rainChB = view.findViewById(R.id.rainCheckBox);
-        crashChB = view.findViewById(R.id.crashCheckBox);
-        brokenTrLightChB = view.findViewById(R.id.brokenTrfLightCheckBox);
-        maintenanceChB = view.findViewById(R.id.maintenanceCheckBox);
-        trafficJamChB = view.findViewById(R.id.trafficJamCheckBox);
-        otherChB = view.findViewById(R.id.otherCheckBox);
         submitButton = view.findViewById(R.id.submitButtonTrJmFrg);
         locationEditText = view.findViewById(R.id.locationEdTxId);
         currentLocationBtn = view.findViewById(R.id.currentLocationBtnId);
         otherReasonEditText = view.findViewById(R.id.otherEditText);
         vehicleNoEditText = view.findViewById(R.id.vehicleNumberEdTxFeedbackFrgmt);
         cleanButton = view.findViewById(R.id.cleanButtonTrJmFrg);
-        radiusTextView = view.findViewById(R.id.radiusTextViewFeedbackFragID);
-        radiusTextView.setText(activity.getResources().getString(R.string.radius_message, defaultRadius));
-        radiusSeekBar = view.findViewById(R.id.radiusSeekBarFeedbackFragID);
-        alternativeRoutesButton = view.findViewById(R.id.alternativeRoutesBttnID);
     }
 
     private void initialiseSpinners() {
@@ -138,25 +135,33 @@ public class FeedbackFragment extends CustomFragment {
         cleanButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 cleanData();
             }
         });
     }
 
     private void cleanData() {
+        cleanCheckBoxes();
         stuckEditText.setText("");
         measurementSpinner.setSelection(0);
         vehicleSpinner.setSelection(0);
         vehicleNoEditText.setText("");
+        locationEditText.setText("");
+        location.cleanUp();
+    }
+
+    private void cleanCheckBoxes() {
         rainChB.setChecked(false);
-        crashChB.setChecked(false);
+        snowChB.setChecked(false);
         brokenTrLightChB.setChecked(false);
         otherChB.setChecked(false);
         trafficJamChB.setChecked(false);
-        maintenanceChB.setChecked(false);
+        fogChB.setChecked(false);
+        potholeChB.setChecked(false);
+        detourChB.setChecked(false);
+        failingBoardChB.setChecked(false);
         otherReasonEditText.setText("");
-        locationEditText.setText("");
-        location.cleanUp();
     }
 
     private void initialiseSubmitButton() {
@@ -210,49 +215,9 @@ public class FeedbackFragment extends CustomFragment {
         });
     }
 
-    private void initialiseSeekBar() {
-        int minimumValue = 1;
-        radiusSeekBar.setMax(149);
-        radiusSeekBar.setProgress(defaultRadius - 1);
-        radiusSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                radiusTextView.setText(getContext().getResources().getString(R.string.radius_message, (progress + minimumValue)));
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-                defaultRadius = seekBar.getProgress() + minimumValue;
-            }
-        });
-    }
-
-    private void initialiseAlternativeRoutesButton() {
-        alternativeRoutesButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Utils.makeShortToast(getContext(),"Functionality not implemented yet");
-//                String url = "https://usg-demo-4.sb.dfki.de:30101/service/gtfsld/" +
-//                        "api/v1/providers/{provider}/stops/nearBy?" +
-//                        "lat={lat}&lng={lng}&radius={radius}&size={size}&page={page}";
-//                Map<String, String> params = new HashMap<>();
-//                params.put("provider", "flixbus");
-//                params.put("lat", String.valueOf(feedback.getLocation().getLat()));
-//                params.put("lng", String.valueOf(feedback.getLocation().getLng()));
-//                params.put("radius", String.valueOf((feedback.getRadius() * 100000)));
-//                params.put("size", String.valueOf(25));
-//                params.put("page", String.valueOf(1));
-//                Utils.postToGTFSLD(getContext(), null, url, null, null, params, "Successfull", "failure");
-            }
-        });
-    }
-
     private void submitData() {
+        String currentTime = Utils.getCurrentTime();
+
         int stuckTime = Integer.parseInt(stuckEditText.getText().toString());
         String measurementUnit = measurementSpinner.getSelectedItem().toString();
         String vehicle = vehicleSpinner.getSelectedItem().toString();
@@ -263,14 +228,20 @@ public class FeedbackFragment extends CustomFragment {
 
         List<Reason> reasons = findOutReasons();
 
+        if (location == null) {
+            location = new Location();
+        }
         location.setName(locationEditText.getText().toString());
-        HashMap<String, Double> latLng = null;
+        HashMap<String, Double> latLng;
         try {
             latLng = Utils.convertAddressToLatLng(location.getName(), activity);
         } catch (IOException e) {
             e.printStackTrace();
+            Utils.makeShortToast(getContext(), "Current location couldn't be identified. Details:\n" +
+                    "An address name(" + location.getName() + ") cannot be converted to coordinates.");
+            Log.e(TAG, "An address name(" + location.getName() + ") cannot be converted to coordinates.");
+            return;
         } catch (InvalidLocationNameException e) {
-
             e.printStackTrace();
             Utils.makeLongToast(activity, e.getMessage());
             locationEditText.setHint(e.getMessage());
@@ -281,18 +252,15 @@ public class FeedbackFragment extends CustomFragment {
 
         if (feedback == null) {
             feedback = new Feedback(new Location(this.location),
-                    stuckTime, measurementUnit, vehicle, vehicleNo);
+                    stuckTime, measurementUnit, vehicle, vehicleNo, currentTime);
         } else {
             feedback.setLocation(location);
             feedback.setStuckTime(stuckTime);
-            feedback.setMeasurementUnit(measurementUnit);
+            feedback.setTimeMeasurementUnit(measurementUnit);
             feedback.setVehicle(vehicle);
             feedback.setVehicleNo(vehicleNo);
+            feedback.setDateTime(currentTime);
         }
-        feedback.setRadius(this.defaultRadius);
-        Utils.saveStringToPreferences(activity,
-                getActivity().getResources().getString(R.string.nearby_stops_radius_SH_PR_key), String.valueOf(this.defaultRadius));
-
         feedback.setReasons(reasons);
         String[] rdfFormats = getResources().getStringArray(R.array.formats);
         String contentType = getResources().getStringArray(R.array.content_types)[2];
@@ -301,38 +269,36 @@ public class FeedbackFragment extends CustomFragment {
                 .setMessage(getResources().getString(R.string.are_you_sure_message))
                 .setPositiveButton(R.string.word_yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        try {
-                            String result = feedback.getRDFOutput(rdfFormats[0]);
-                            Gson gson = new Gson();
-                            Utils.saveStringToPreferences(activity,
-                                    getResources().getString(R.string.feedback_object_SH_PR_key),
-                                    gson.toJson(feedback));
-                            String size = getResources().getString(
-                                    R.string.size_of_list_per_request_from_feedback_web_service);
-                            Utils.saveStringToPreferences(activity,
-                                    getResources().getString(R.string.size_SH_PR_key), size);
-                            HashMap<String, String> headers = new HashMap<String, String>();
-                            String token = Utils.fetchStringFromPreferences(activity,
-                                    getContext().getResources().getString(R.string.firebase_token_SH_PR_key));
-                            headers.put(getContext().getResources().getString(R.string.token_header_key), token);
-                            headers.put(getContext().getResources().getString(
-                                    R.string.page_header_key), getResources().getString(
-                                    R.string.page_number_for_first_request_from_feedback_web_service));
-                            headers.put(getContext().getResources().getString(R.string.size_header_key), size);
 
-                            Utils.postToFeedbWS(getContext(), result,
-                                    getResources().getString(R.string.feedback_web_service_url),
-                                    contentType, headers,
-                                    getResources().getString(R.string.feedback_submitted_message),
-                                    getResources().getString(R.string.feedback_not_submitted_message));
-                            activity.replaceFragment(activity.getFeedbackFragment(),
-                                    tag, false,
-                                    0, 0);
-                            activity.setMenuItemActive(activity.getFeedbackFragment().getCustomTAG());
-                        } catch (Exception e) {
-                            e.printStackTrace();
+                        String result = feedback.getRDFModel();
+                        Gson gson = new Gson();
+                        Utils.saveStringToPreferences(activity,
+                                getResources().getString(R.string.feedback_object_SH_PR_key),
+                                gson.toJson(feedback));
+                        String size = getResources().getString(
+                                R.string.size_of_list_per_request_from_feedback_web_service);
+                        Utils.saveStringToPreferences(activity,
+                                getResources().getString(R.string.size_SH_PR_key), size);
+                        HashMap<String, String> headers = new HashMap<String, String>();
+//                            String token = Utils.fetchStringFromPreferences(activity,
+//                                    getContext().getResources().getString(R.string.firebase_token_SH_PR_key));
+//                            headers.put(getContext().getResources().getString(R.string.token_header_key), token);
+//                            headers.put(getContext().getResources().getString(
+//                                    R.string.page_header_key), getResources().getString(
+//                                    R.string.page_number_for_first_request_from_feedback_web_service));
+//                            headers.put(getContext().getResources().getString(R.string.size_header_key), size);
 
-                        }
+                        Utils.postToFeedbWS(getContext(), result,
+                                getResources().getString(R.string.feedback_web_service_url),
+                                contentType, headers,
+                                getResources().getString(R.string.feedback_submitted_message),
+                                getResources().getString(R.string.feedback_not_submitted_message));
+                        activity.replaceFragment(activity.getFeedbackFragment(),
+                                TAG, false,
+                                0, 0);
+                        activity.setMenuItemActive(activity.getFeedbackFragment().getCustomTAG());
+
+
                     }
                 })
                 .setNegativeButton(R.string.word_no, null)
@@ -351,17 +317,29 @@ public class FeedbackFragment extends CustomFragment {
             Reason brokenTrafficJam = new Reason(getResources().getString(R.string.reason_broken_jam_title));
             reasons.add(brokenTrafficJam);
         }
-        if (crashChB.isChecked()) {
-            Reason crash = new Reason(getResources().getString(R.string.reason_crash_title));
-            reasons.add(crash);
+        if (snowChB.isChecked()) {
+            Reason snow = new Reason(getResources().getString(R.string.reason_snow_title));
+            reasons.add(snow);
         }
         if (trafficJamChB.isChecked()) {
             Reason trafficJam = new Reason(getResources().getString(R.string.reason_traffic_jam_title));
             reasons.add(trafficJam);
         }
-        if (maintenanceChB.isChecked()) {
-            Reason maintenance = new Reason(getResources().getString(R.string.reason_maintenance_title));
-            reasons.add(maintenance);
+        if (fogChB.isChecked()) {
+            Reason fog = new Reason(getResources().getString(R.string.reason_fog_title));
+            reasons.add(fog);
+        }
+        if (potholeChB.isChecked()) {
+            Reason pothole = new Reason(getResources().getString(R.string.reason_pothole_title));
+            reasons.add(pothole);
+        }
+        if (failingBoardChB.isChecked()) {
+            Reason failingBoard = new Reason(getResources().getString(R.string.reason_failing_info_board_title));
+            reasons.add(failingBoard);
+        }
+        if (detourChB.isChecked()) {
+            Reason detour = new Reason(getResources().getString(R.string.reason_detour_title));
+            reasons.add(detour);
         }
         if (otherChB.isChecked()) {
             Reason other = new Reason(getResources().getString(R.string.reason_other_title));
@@ -381,6 +359,6 @@ public class FeedbackFragment extends CustomFragment {
 
     @Override
     public String getCustomTAG() {
-        return tag;
+        return TAG;
     }
 }

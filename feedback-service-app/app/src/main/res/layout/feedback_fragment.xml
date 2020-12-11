@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -108,7 +109,7 @@
                 <EditText
                     android:id="@+id/locationEdTxId"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:hint="@string/word_address"
                     android:inputType="textPersonName"
@@ -118,27 +119,14 @@
                 <ImageButton
                     android:id="@+id/currentLocationBtnId"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_weight="5"
-                    app:srcCompat="@drawable/placeholder" />
+                    android:background="#FFFFFF"
+                    android:src="@drawable/location_icon"
+                    tools:srcCompat="@drawable/location_icon" />
+
 
             </LinearLayout>
-
-            <TextView
-                android:id="@+id/radiusTextViewFeedbackFragID"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:textAlignment="center"
-                android:textColor="#1C1A1A"
-                android:textSize="20sp" />
-
-            <SeekBar
-                android:id="@+id/radiusSeekBarFeedbackFragID"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:progress="50" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -158,39 +146,64 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:orientation="vertical">
+
+                    <CheckBox
+                        android:id="@+id/potholeCheckBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/reason_pothole_title"
+                        android:textColor="#1C1A1A"
+                        android:textSize="14sp" />
+
+                    <CheckBox
+                        android:id="@+id/failingBoardCheckBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/reason_failing_info_board_title"
+                        android:textColor="#1C1A1A"
+                        android:textSize="14sp" />
+
+                    <CheckBox
+                        android:id="@+id/brokenLightCheckBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/reason_broken_jam_title"
+                        android:textColor="#1C1A1A"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <CheckBox
+                        android:id="@+id/snowCheckBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/reason_snow_title"
+                        android:textColor="#1C1A1A"
+                        android:textSize="14sp" />
 
                     <CheckBox
                         android:id="@+id/rainCheckBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Rain"
+                        android:text="@string/reason_rain_title"
                         android:textColor="#1C1A1A"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
+                        android:textSize="14sp" />
 
                     <CheckBox
-                        android:id="@+id/trafficJamCheckBox"
-                        android:layout_width="wrap_content"
+                        android:id="@+id/fogCheckBox"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Traffic Jam"
+                        android:text="@string/reason_fog_title"
                         android:textColor="#1C1A1A"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
-
-                    <CheckBox
-                        android:id="@+id/brokenTrfLightCheckBox"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/reason_broken_jam_title"
-                        android:textColor="#1C1A1A"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
+                        android:textSize="14sp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -200,22 +213,22 @@
                     android:orientation="vertical">
 
                     <CheckBox
-                        android:id="@+id/crashCheckBox"
+                        android:id="@+id/detourCheckBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Crash"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
+                        android:text="@string/reason_detour_title"
+                        android:textColor="#1C1A1A"
+                        android:textSize="14sp" />
 
                     <CheckBox
-                        android:id="@+id/maintenanceCheckBox"
+                        android:id="@+id/trafficJamCheckBox"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Maintenance"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
+                        android:text="@string/reason_traffic_jam_title"
+                        android:textColor="#1C1A1A"
+                        android:textSize="14sp" />
 
                     <CheckBox
                         android:id="@+id/otherCheckBox"
@@ -224,8 +237,7 @@
                         android:layout_weight="1"
                         android:text="Other"
                         android:textColor="#1C1A1A"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
+                        android:textSize="14sp" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -261,21 +273,6 @@
                     android:layout_marginLeft="10dp"
                     android:layout_weight="1"
                     android:text="Clean" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/alternativeRoutesBttnID"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Alternative Routes" />
 
             </LinearLayout>
 
