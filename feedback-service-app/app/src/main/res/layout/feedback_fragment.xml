@@ -146,14 +146,22 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:orientation="vertical">
+
+                    <CheckBox
+                        android:id="@+id/malfuncVehicleheckBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/reason_malfunctioning_vehicle_title" />
 
                     <CheckBox
                         android:id="@+id/potholeCheckBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:text="@string/reason_pothole_title"
                         android:textColor="#1C1A1A"
                         android:textSize="14sp" />
@@ -162,6 +170,7 @@
                         android:id="@+id/failingBoardCheckBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:text="@string/reason_failing_info_board_title"
                         android:textColor="#1C1A1A"
                         android:textSize="14sp" />
@@ -170,6 +179,7 @@
                         android:id="@+id/brokenLightCheckBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:text="@string/reason_broken_jam_title"
                         android:textColor="#1C1A1A"
                         android:textSize="14sp" />
@@ -177,7 +187,7 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:orientation="vertical">
 
@@ -185,6 +195,7 @@
                         android:id="@+id/snowCheckBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:text="@string/reason_snow_title"
                         android:textColor="#1C1A1A"
                         android:textSize="14sp" />
@@ -193,6 +204,7 @@
                         android:id="@+id/rainCheckBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:text="@string/reason_rain_title"
                         android:textColor="#1C1A1A"
                         android:textSize="14sp" />
@@ -201,6 +213,7 @@
                         android:id="@+id/fogCheckBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:text="@string/reason_fog_title"
                         android:textColor="#1C1A1A"
                         android:textSize="14sp" />

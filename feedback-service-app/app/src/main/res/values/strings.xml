@@ -31,14 +31,18 @@
     <string name="add_info">Additional Info:</string>
     <string name="word_address">Address</string>
 <!--    Reasons -->
+<!--    Permanent-->
+    <string name="reason_broken_jam_title">Broken Traffic Light</string>
+    <string name="reason_failing_info_board_title">Failing Info Board</string>
+    <string name="reason_pothole_title">Pothole</string>
+    <string name="reason_malfunctioning_vehicle_title">Malfunctioning Vehicle</string>
+<!--    Passing-->
     <string name="reason_detour_title">Detour</string>
     <string name="reason_traffic_jam_title">Traffic Jam</string>
     <string name="reason_fog_title">Fog</string>
     <string name="reason_rain_title">Rain</string>
     <string name="reason_snow_title">Snow</string>
-    <string name="reason_broken_jam_title">Broken Traffic Light</string>
-    <string name="reason_failing_info_board_title">Failing Info Board</string>
-    <string name="reason_pothole_title">Pothole</string>
+<!--    Other-->
     <string name="reason_other_title">Other</string>
 <!--    Reasons -->
     <string name="word_yes">Yes</string>

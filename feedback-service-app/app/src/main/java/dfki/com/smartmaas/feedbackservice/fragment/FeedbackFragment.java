@@ -44,7 +44,7 @@ public class FeedbackFragment extends CustomFragment {
     private Spinner measurementSpinner, vehicleSpinner;
     private ImageButton currentLocationBtn;
     private EditText stuckEditText, locationEditText, otherReasonEditText, vehicleNoEditText;
-    private CheckBox rainChB, snowChB, brokenTrLightChB, fogChB, trafficJamChB, otherChB, potholeChB, failingBoardChB, detourChB;
+    private CheckBox rainChB, snowChB, brokenTrLightChB, fogChB, trafficJamChB, otherChB, potholeChB, failingBoardChB, detourChB, malfuncVehivleChB;
     private Button submitButton, cleanButton;
     private Feedback feedback;
     private Location location;
@@ -86,6 +86,7 @@ public class FeedbackFragment extends CustomFragment {
         detourChB = view.findViewById(R.id.detourCheckBox);
         failingBoardChB = view.findViewById(R.id.failingBoardCheckBox);
         potholeChB = view.findViewById(R.id.potholeCheckBox);
+        malfuncVehivleChB = view.findViewById(R.id.malfuncVehicleheckBox);
     }
 
     private void initialiseViews(View view) {
@@ -161,6 +162,7 @@ public class FeedbackFragment extends CustomFragment {
         potholeChB.setChecked(false);
         detourChB.setChecked(false);
         failingBoardChB.setChecked(false);
+        malfuncVehivleChB.setChecked(false);
         otherReasonEditText.setText("");
     }
 
@@ -270,7 +272,7 @@ public class FeedbackFragment extends CustomFragment {
                 .setPositiveButton(R.string.word_yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
 
-                        String result = feedback.getRDFModel();
+                        String result = feedback.getFeedbackMessage();
                         Gson gson = new Gson();
                         Utils.saveStringToPreferences(activity,
                                 getResources().getString(R.string.feedback_object_SH_PR_key),
@@ -310,39 +312,53 @@ public class FeedbackFragment extends CustomFragment {
     private List<Reason> findOutReasons() {
         List<Reason> reasons = new ArrayList<>();
         if (rainChB.isChecked()) {
-            Reason rain = new Reason(getResources().getString(R.string.reason_rain_title));
+            Reason rain = new Reason(Utils.removeAllSpaces(getResources().getString(R.string.reason_rain_title)),
+                    Reason.PASSING_REASON);
             reasons.add(rain);
         }
         if (brokenTrLightChB.isChecked()) {
-            Reason brokenTrafficJam = new Reason(getResources().getString(R.string.reason_broken_jam_title));
+            Reason brokenTrafficJam = new Reason(Utils.removeAllSpaces(getResources().getString(R.string.reason_broken_jam_title)),
+                    Reason.PERMANENT_REASON);
             reasons.add(brokenTrafficJam);
         }
         if (snowChB.isChecked()) {
-            Reason snow = new Reason(getResources().getString(R.string.reason_snow_title));
+            Reason snow = new Reason(Utils.removeAllSpaces(getResources().getString(R.string.reason_snow_title)),
+                    Reason.PASSING_REASON);
             reasons.add(snow);
         }
         if (trafficJamChB.isChecked()) {
-            Reason trafficJam = new Reason(getResources().getString(R.string.reason_traffic_jam_title));
+            Reason trafficJam = new Reason(Utils.removeAllSpaces(getResources().getString(R.string.reason_traffic_jam_title)),
+                    Reason.PASSING_REASON);
             reasons.add(trafficJam);
         }
         if (fogChB.isChecked()) {
-            Reason fog = new Reason(getResources().getString(R.string.reason_fog_title));
+            Reason fog = new Reason(Utils.removeAllSpaces(getResources().getString(R.string.reason_fog_title)),
+                    Reason.PASSING_REASON);
             reasons.add(fog);
         }
         if (potholeChB.isChecked()) {
-            Reason pothole = new Reason(getResources().getString(R.string.reason_pothole_title));
+            Reason pothole = new Reason(Utils.removeAllSpaces(getResources().getString(R.string.reason_pothole_title)),
+                    Reason.PERMANENT_REASON);
             reasons.add(pothole);
         }
         if (failingBoardChB.isChecked()) {
-            Reason failingBoard = new Reason(getResources().getString(R.string.reason_failing_info_board_title));
+            Reason failingBoard = new Reason(Utils.removeAllSpaces(getResources().getString(R.string.reason_failing_info_board_title)),
+                    Reason.PERMANENT_REASON);
             reasons.add(failingBoard);
         }
+        if (malfuncVehivleChB.isChecked()) {
+            Reason malfuncVehicle = new Reason(Utils.removeAllSpaces(getResources().getString(R.string.reason_malfunctioning_vehicle_title)),
+                    Reason.PERMANENT_REASON);
+            reasons.add(malfuncVehicle);
+        }
         if (detourChB.isChecked()) {
-            Reason detour = new Reason(getResources().getString(R.string.reason_detour_title));
+            Reason detour = new Reason(Utils.removeAllSpaces(getResources().getString(R.string.reason_detour_title)),
+                    Reason.PASSING_REASON);
             reasons.add(detour);
         }
         if (otherChB.isChecked()) {
-            Reason other = new Reason(getResources().getString(R.string.reason_other_title));
+            Reason other = new Reason(Utils.removeAllSpaces(getResources().getString(R.string.reason_other_title)),
+                    Reason.OTHER_REASON);
             other.setAdditionalInfo(otherReasonEditText.getText().toString());
             reasons.add(other);
         }
