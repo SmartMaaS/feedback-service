@@ -47,7 +47,7 @@
 <!--    Reasons -->
     <string name="word_yes">Yes</string>
     <string name="word_no">No</string>
-    <string name="feedback_web_service_url">http://192.168.42.52:8803/feedback_service/feedback</string>
+    <string name="feedback_web_service_url">http://172.16.7.224:8803/feedback_service/feedback</string>
     <string name="alternative_routes_web_service_url">http://192.168.0.102:8804/alternativeRoutes</string>
     <string name="word_in">In</string>
     <string name="word_on">On</string>
