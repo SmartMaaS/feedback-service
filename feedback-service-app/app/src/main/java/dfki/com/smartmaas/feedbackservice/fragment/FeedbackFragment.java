@@ -264,6 +264,7 @@ public class FeedbackFragment extends CustomFragment {
             feedback.setDateTime(currentTime);
         }
         feedback.setReasons(reasons);
+        feedback.setUsername(Utils.fetchStringFromPreferences(getContext(), getResources().getString(R.string.username_key_shrd_prf)));
         String[] rdfFormats = getResources().getStringArray(R.array.formats);
         String contentType = getResources().getStringArray(R.array.content_types)[2];
 

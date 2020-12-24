@@ -42,13 +42,10 @@ public class PreliminaryFragment extends CustomFragment {
     }
 
     private void initialiseViews(View view) {
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                LoginFragment loginFragment = new LoginFragment();
-                activity.replaceFragment(loginFragment, loginFragment.getCustomTAG(),
-                        false, android.R.anim.fade_in, android.R.anim.fade_out);
-            }
+        view.setOnClickListener(view1 -> {
+            LoginFragment loginFragment = new LoginFragment();
+            activity.replaceFragment(loginFragment, loginFragment.getCustomTAG(),
+                    false, android.R.anim.fade_in, android.R.anim.fade_out);
         });
         continueTxVw = view.findViewById(R.id.contineTxVw);
         navigationMenu = activity.findViewById(R.id.container);

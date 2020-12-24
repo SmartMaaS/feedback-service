@@ -45,6 +45,8 @@ public class Feedback {
     private List<Reason> reasons;
     @Element
     private final String distanceMeasurementUnit = "km";
+
+
     // TODO the username should be received via logging in.
     private String username = "username";
 
@@ -63,6 +65,14 @@ public class Feedback {
 
     public void setTimeMeasurementUnit(String timeMeasurementUnit) {
         this.timeMeasurementUnit = timeMeasurementUnit;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getDistanceMeasurementUnit() {

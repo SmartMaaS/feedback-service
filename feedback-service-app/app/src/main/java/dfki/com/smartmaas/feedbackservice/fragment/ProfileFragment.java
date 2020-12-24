@@ -61,7 +61,7 @@ public class ProfileFragment extends CustomFragment {
             public void onClick(View view) {
 //                FirebaseAuth.getInstance().signOut();
 //                sharedPreferences.edit().clear().apply();
-//                openLoginFragment();
+                openLoginFragment();
             }
         });
     }
