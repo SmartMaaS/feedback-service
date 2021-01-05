@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -18,6 +17,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
+
+import java.util.Objects;
 
 import dfki.com.smartmaas.feedbackservice.R;
 import dfki.com.smartmaas.feedbackservice.activity.MainActivity;
@@ -196,7 +197,9 @@ public class LoginFragment extends CustomFragment {
     }
 
     private void openFeedbackFragment() {
-        saveUsername2SharedPreferences(usernameEdTx.getText().toString().trim());
+        Utils.saveStringToPreferences(Objects.requireNonNull(getContext()), getResources().getString(R.string.username_key_shrd_prf),
+                usernameEdTx.getText().toString().trim());
+
         activity.replaceFragment(activity.getFeedbackFragment(),
                 activity.getFeedbackFragment().getCustomTAG(),
                 false, 0, 0);
@@ -204,10 +207,6 @@ public class LoginFragment extends CustomFragment {
         Utils.showNavigationBottomView(navigationMenu);
         usernameEdTx.setText("");
         passEdTx.setText("");
-    }
-
-    private void saveUsername2SharedPreferences(String username) {
-        Utils.saveStringToPreferences(getContext(), getResources().getString(R.string.username_key_shrd_prf), username);
     }
 
     private void logToRegisterAndViceVersa(boolean toRegistr) {

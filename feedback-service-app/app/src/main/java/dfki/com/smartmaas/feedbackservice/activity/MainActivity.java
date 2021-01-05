@@ -219,6 +219,9 @@ public class MainActivity extends BaseActivity implements FragmentController, Lo
     }
 
     public FeedbackFragment getFeedbackFragment() {
+        if (feedbackFragment == null) {
+            return new FeedbackFragment();
+        }
         return feedbackFragment;
     }
 
@@ -282,8 +285,8 @@ public class MainActivity extends BaseActivity implements FragmentController, Lo
             this.location.setName(Utils.convertLatLongToAddress(lat, lng, this));
         } catch (IOException e) {
             e.printStackTrace();
-            Utils.makeShortToast(getApplicationContext(), "Current location couldn't be identified. " +
-                    "Latitude(" + lat + ") and longitude(" + lng + ") cannot be converted to an address name.");
+            Utils.makeLongToast(getApplicationContext(), "Current location couldn't be identified. " +
+                    "Latitude(" + lat + ") and longitude(" + lng + ") cannot be converted to an address.");
             Log.e(TAG, "Latitude(" + lat + ") and longitude(" + lng + ") cannot be converted to an address name.");
         }
         locationUpdate.stopLocationUpdates();

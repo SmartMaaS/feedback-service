@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.location.Address;
 import android.location.Geocoder;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
@@ -50,6 +52,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
@@ -175,10 +178,7 @@ public class Utils {
         httpsURLConnection.setHostnameVerifier(new HostnameVerifier() {
             @Override
             public boolean verify(String hostname, SSLSession session) {
-                if (context.getResources().getString(R.string.feedback_web_service_url).contains(hostname)) {
-                    return true;
-                }
-                return false;
+                return context.getResources().getString(R.string.feedback_web_service_url).contains(hostname);
             }
         });
         httpsURLConnection.setSSLSocketFactory((SSLSocketFactory) SSLSocketFactory.getDefault());
@@ -328,10 +328,7 @@ public class Utils {
 
                     Log.e("CipherUsed", session.getCipherSuite());
                     String serverURL = appContext.getResources().getString(R.string.feedback_web_service_url);
-                    if (serverURL.contains(hostname)) {
-                        return true;
-                    }
-                    return false;
+                    return serverURL.contains(hostname);
 //                    return hostname.compareTo()==0; //The Hostname of your server.
 
                 }
@@ -417,8 +414,16 @@ public class Utils {
     public static String fetchStringFromPreferences(Context context, String key) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(
                 context.getResources().getString(R.string.shared_preferences_name), Context.MODE_PRIVATE);
+
         return sharedPreferences.getString(key, context.getResources().
                 getString(R.string.no_data_found_shrd_prfs));
+    }
+
+    public static void cleanSharedPreferences(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(
+                context.getResources().getString(R.string.shared_preferences_name), Context.MODE_PRIVATE);
+        sharedPreferences.edit().clear().apply();
+
     }
 
     public static void makeShortToast(Context context, String message) {
@@ -433,6 +438,12 @@ public class Utils {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         Date currentTime = Calendar.getInstance().getTime();
         return dateFormat.format(currentTime);
+    }
+
+    public static boolean isConnectedToInternet(Context context) {
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        return Objects.requireNonNull(connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE)).getState() == NetworkInfo.State.CONNECTED ||
+                Objects.requireNonNull(connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI)).getState() == NetworkInfo.State.CONNECTED;
     }
 
 }

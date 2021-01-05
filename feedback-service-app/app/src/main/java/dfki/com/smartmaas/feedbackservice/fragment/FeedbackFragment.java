@@ -239,9 +239,16 @@ public class FeedbackFragment extends CustomFragment {
             latLng = Utils.convertAddressToLatLng(location.getName(), activity);
         } catch (IOException e) {
             e.printStackTrace();
-            Utils.makeShortToast(getContext(), "Current location couldn't be identified. Details:\n" +
-                    "An address name(" + location.getName() + ") cannot be converted to coordinates.");
-            Log.e(TAG, "An address name(" + location.getName() + ") cannot be converted to coordinates.");
+            if (!Utils.isConnectedToInternet(activity.getApplicationContext())) {
+                Utils.makeLongToast(getContext(), "Coordinates of the location cannot be computed." +
+                        " Check your internet connection, please!");
+                Log.e(TAG, "No internet connection to convert location to coordinates");
+
+            } else {
+                Utils.makeLongToast(getContext(), "Current location couldn't be identified. Details:\n" +
+                        "The address (" + location.getName() + ") cannot be converted to coordinates.");
+                Log.e(TAG, "An address name(" + location.getName() + ") cannot be converted to coordinates.");
+            }
             return;
         } catch (InvalidLocationNameException e) {
             e.printStackTrace();

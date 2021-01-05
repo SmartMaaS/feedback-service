@@ -27,6 +27,7 @@ public class ProfileFragment extends CustomFragment {
     private SharedPreferences sharedPreferences;
     private MainActivity activity;
     private ConstraintLayout navigationMenu;
+    private TextView usernameTxView;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -49,10 +50,13 @@ public class ProfileFragment extends CustomFragment {
 
     private void initialiseViews(View view) {
         logOutButton = view.findViewById(R.id.logOutBttnID);
-        TextView emailTextView = view.findViewById(R.id.emailTxVwIDPrflFrgmnt);
-        emailTextView.setText(sharedPreferences.getString(
-                getResources().getString(R.string.user_email_shrd_prf_key), null));
+//        TextView emailTextView = view.findViewById(R.id.emailTxVwIDPrflFrgmnt);
+//        emailTextView.setText(sharedPreferences.getString(
+//                getResources().getString(R.string.user_email_shrd_prf_key), null));
         navigationMenu = activity.findViewById(R.id.container);
+        usernameTxView = view.findViewById(R.id.usernameTxVwIDPrflFragment);
+        usernameTxView.setText("Username: " + Utils.fetchStringFromPreferences(activity.getApplicationContext(),
+                getResources().getString(R.string.username_key_shrd_prf)));
     }
 
     private void initialiseLogOutBttn() {
@@ -60,7 +64,8 @@ public class ProfileFragment extends CustomFragment {
             @Override
             public void onClick(View view) {
 //                FirebaseAuth.getInstance().signOut();
-//                sharedPreferences.edit().clear().apply();
+
+                Utils.cleanSharedPreferences(activity.getApplicationContext());
                 openLoginFragment();
             }
         });
