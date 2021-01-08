@@ -1,5 +1,6 @@
 package de.dfki.feedback_service.feedback_webservice.controllers;
 
+import de.dfki.feedback_service.feedback_webservice.json.JsonFramer;
 import de.dfki.feedback_service.feedback_webservice.models.Feedback;
 import de.dfki.feedback_service.feedback_webservice.services.FeedbackService;
 import de.dfki.feedback_service.feedback_webservice.swagger.SwaggerConfig;
@@ -8,6 +9,8 @@ import de.dfki.feedback_service.feedback_webservice.utils.Utils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import org.eclipse.rdf4j.model.Model;
 import org.eclipse.rdf4j.rio.RDFFormat;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +20,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
+import java.io.InputStream;
+import org.eclipse.rdf4j.query.GraphQuery;
+import org.eclipse.rdf4j.query.GraphQueryResult;
+import org.eclipse.rdf4j.query.QueryResults;
+import org.eclipse.rdf4j.repository.Repository;
+import org.eclipse.rdf4j.repository.RepositoryConnection;
+import org.eclipse.rdf4j.rio.RDFWriter;
+import org.eclipse.rdf4j.rio.Rio;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -53,8 +64,41 @@ public class FeedbackController {
     @ApiOperation(value = "Get all Feedbacks stored in the store currently at a time")
     @GetMapping(value = "/feedback", produces = "application/ld+json")
     @ApiImplicitParam(name = "userFeedback", value = "Feedback Input",
-            example = Feedback.example, format = "text/turtle")
-    public ResponseEntity<?> getFeedback() {
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+            example = Feedback.example, format = "application/ld+json")
+    public ResponseEntity<?> getFeedbackAsJsonLD() {
+		Repository feedbackRepository = RDF4JRepositoryHandler.getRepository("example_feedback");
+		String queryString = "PREFIX smf: <http://www.dfki.de/SmartMaaS/feedback#> \n"
+				+ "DESCRIBE ?feedback \n"
+				+ "WHERE { ?feedback a smf:Feedback }";
+		try (RepositoryConnection conn = feedbackRepository.getConnection()) {
+			GraphQuery query = conn.prepareGraphQuery(queryString);
+			GraphQueryResult feedbacks = query.evaluate();
+			Model resultModel = QueryResults.asModel(feedbacks);
+			ByteArrayOutputStream modelAsTurtle = new ByteArrayOutputStream();
+			Rio.write(resultModel, modelAsTurtle, RDFFormat.TURTLE);
+			InputStream resultStream = new ByteArrayInputStream(modelAsTurtle.toByteArray());
+			String resultAsJsonLD = JsonFramer.getPrettyJsonLdString(resultStream, RDFFormat.TURTLE);
+			return new ResponseEntity<>(resultAsJsonLD, HttpStatus.OK);
+		} catch (Exception ex) {
+			return new ResponseEntity<>("Could not get feedbacks: " + ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+    }
+
+	@ApiOperation(value = "Get all Feedbacks stored in the store currently at a time")
+    @GetMapping(value = "/feedback", produces = "text/turtle")
+    @ApiImplicitParam(name = "userFeedback", value = "Feedback Input",
+            example = Feedback.example, format = "application/ld+json")
+    public ResponseEntity<?> getFeedbackAsTurtle() {
+		Repository feedbackRepository = RDF4JRepositoryHandler.getRepository("example_feedback");
+		String queryString = "PREFIX smf: <http://www.dfki.de/SmartMaaS/feedback#> \n"
+				+ "DESCRIBE ?feedback \n"
+				+ "WHERE { ?feedback a smf:Feedback }";
+		try (RepositoryConnection conn = feedbackRepository.getConnection()) {
+			GraphQuery query = conn.prepareGraphQuery(queryString);
+			GraphQueryResult feedbacks = query.evaluate();
+			return new ResponseEntity<>(QueryResults.asModel(feedbacks).toString(), HttpStatus.OK);
+		} catch (Exception ex) {
+			return new ResponseEntity<>("Could not get feedbacks: " + ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
     }
 }
