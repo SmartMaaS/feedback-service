@@ -27,6 +27,7 @@ import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.eclipse.rdf4j.rio.Rio;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @Api(tags = {SwaggerConfig.FEEDBACK_RECEIVER_TAG})
@@ -59,7 +60,7 @@ public class FeedbackController {
     }
 
     @ApiOperation(value = "Get all Feedbacks stored in the store currently at a time in JSON LD format")
-    @GetMapping(value = "/feedback", produces = "application/ld+json")
+    @GetMapping(value = "/allFeedbacks", produces = "application/ld+json")
     public ResponseEntity<?> getFeedbackAsJsonLD() {
 		Repository feedbackRepository = RDF4JRepositoryHandler.getRepository("example_feedback");
 		String queryString = "PREFIX smf: <http://www.dfki.de/SmartMaaS/feedback#> \n"
@@ -77,8 +78,70 @@ public class FeedbackController {
 		}
     }
 
+	@ApiOperation(value = "Get one Feedback of the given ID in JSON LD format")
+    @GetMapping(value = "/feedback", produces = "application/ld+json")
+    public ResponseEntity<?> getSpecificFeedbackAsJsonLD(@RequestParam final String feedbackId) {
+		Repository feedbackRepository = RDF4JRepositoryHandler.getRepository("example_feedback");
+		String queryString = "PREFIX  exf:  <http://www.example.fe/edback#> \n"
+				+ "DESCRIBE " + feedbackId;
+		try (RepositoryConnection conn = feedbackRepository.getConnection()) {
+			GraphQuery query = conn.prepareGraphQuery(queryString);
+			GraphQueryResult feedbacks = query.evaluate();
+			Model resultModel = QueryResults.asModel(feedbacks);
+			ByteArrayOutputStream modelAsJsonLd = new ByteArrayOutputStream();
+			Rio.write(resultModel, modelAsJsonLd, RDFFormat.JSONLD);
+			return new ResponseEntity<>(modelAsJsonLd.toString(StandardCharsets.UTF_8), HttpStatus.OK);
+		} catch (Exception ex) {
+			return new ResponseEntity<>("Could not get feedbacks: " + ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+    }
+
+	@ApiOperation(value = "Get one Feedback of the given ID in JSON LD format")
+    @GetMapping(value = "/feedbackWithPermanentReason", produces = "application/ld+json")
+    public ResponseEntity<?> getFeedbacksWithPermanentReasonAsJsonLD() {
+		Repository feedbackRepository = RDF4JRepositoryHandler.getRepository("example_feedback");
+		String queryString = "PREFIX smf: <http://www.dfki.de/SmartMaaS/feedback#> \n"
+				+ "DESCRIBE ?feedback \n"
+				+ "WHERE { ?feedback smf:becauseOf ?reason. \n"
+				+ "			?reason a smf:PermanentReason }";
+		try (RepositoryConnection conn = feedbackRepository.getConnection()) {
+			GraphQuery query = conn.prepareGraphQuery(queryString);
+			GraphQueryResult feedbacks = query.evaluate();
+			Model resultModel = QueryResults.asModel(feedbacks);
+			ByteArrayOutputStream modelAsJsonLd = new ByteArrayOutputStream();
+			Rio.write(resultModel, modelAsJsonLd, RDFFormat.JSONLD);
+			return new ResponseEntity<>(modelAsJsonLd.toString(StandardCharsets.UTF_8), HttpStatus.OK);
+		} catch (Exception ex) {
+			return new ResponseEntity<>("Could not get feedbacks: " + ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+    }
+
+	@ApiOperation(value = "Get all reasons currently causing feedbacks")
+    @GetMapping(value = "/allPermanentReasons", produces = "application/ld+json")
+    public ResponseEntity<?> getAllPermanentReasonsAsJsonLD() {
+		Repository feedbackRepository = RDF4JRepositoryHandler.getRepository("example_feedback");
+		String queryString = "PREFIX smf: <http://www.dfki.de/SmartMaaS/feedback#> \n"
+				+ "CONSTRUCT { _:r smf:reasonFor ?feedback . \n"
+				+ "			   _:r a ?reasonType }"
+				+ "WHERE { ?feedback a smf:Feedback. \n"
+				+ "		   ?reason smf:reasonFor ?feedback. \n"
+				+ "		   ?reason a smf:PermanentReason ."
+				+ "		   ?reason a ?reasonType . }"
+				+ "ORDER BY ?feedback";
+		try (RepositoryConnection conn = feedbackRepository.getConnection()) {
+			GraphQuery query = conn.prepareGraphQuery(queryString);
+			GraphQueryResult feedbacks = query.evaluate();
+			Model resultModel = QueryResults.asModel(feedbacks);
+			ByteArrayOutputStream modelAsJsonLd = new ByteArrayOutputStream();
+			Rio.write(resultModel, modelAsJsonLd, RDFFormat.JSONLD);
+			return new ResponseEntity<>(modelAsJsonLd.toString(StandardCharsets.UTF_8), HttpStatus.OK);
+		} catch (Exception ex) {
+			return new ResponseEntity<>("Could not get feedbacks: " + ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+    }
+
 	@ApiOperation(value = "Get all Feedbacks stored in the store currently at a time")
-    @GetMapping(value = "/feedback", produces = "text/turtle")
+    @GetMapping(value = "/allFeedbacks", produces = "text/turtle")
     @ApiImplicitParam(name = "userFeedback", value = "Feedback Input",
             example = Feedback.example, format = "application/ld+json")
     public ResponseEntity<?> getFeedbackAsTurtle() {
