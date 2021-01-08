@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.GetMapping;
 
 @RestController
 @Api(tags = {SwaggerConfig.FEEDBACK_RECEIVER_TAG})
@@ -46,5 +48,13 @@ public class FeedbackController {
 
         return ResponseEntity
                 .ok(userFeedback);
+    }
+
+    @ApiOperation(value = "Get all Feedbacks stored in the store currently at a time")
+    @GetMapping(value = "/feedback", produces = "application/ld+json")
+    @ApiImplicitParam(name = "userFeedback", value = "Feedback Input",
+            example = Feedback.example, format = "text/turtle")
+    public ResponseEntity<?> getFeedback() {
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
     }
 }
