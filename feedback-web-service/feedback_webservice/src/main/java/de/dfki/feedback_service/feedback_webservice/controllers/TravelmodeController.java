@@ -48,13 +48,14 @@ public class TravelmodeController {
 		String queryString = "PREFIX foaf: <http://xmlns.com/foaf/spec/> \n"
 				+ "PREFIX  smf: <http://www.dfki.de/SmartMaaS/feedback#> \n"
 				+ "PREFIX  time: <http://www.w3.org/2006/time#> \n"
-				+ "CONSTRUCT ?t a smf:Travelmode . \n"
+				+ "DESCRIBE ?mode \n"
 				+ "WHERE { \n"
-				+ userName + " smf:travelsBy ?t. \n"
-				+ "?t time:xsdDateTime ?timestamp \n"
+				+ "?mode foaf:accountName \"" + userName + "\" . \n"
+				+ "?mode time:xsdDateTime ?timestamp . \n"
 				+ "} \n"
 				+ "ORDER BY ?timestamp \n"
 				+ "LIMIT 1";
+		System.out.println("Sending query: \n" + queryString);
 		try (RepositoryConnection conn = feedbackRepository.getConnection()) {
 			ByteArrayOutputStream modelAsJsonLd = getQueryResultAsJsonLD(conn, queryString);
 			return new ResponseEntity<>(modelAsJsonLd.toString(StandardCharsets.UTF_8), HttpStatus.OK);
