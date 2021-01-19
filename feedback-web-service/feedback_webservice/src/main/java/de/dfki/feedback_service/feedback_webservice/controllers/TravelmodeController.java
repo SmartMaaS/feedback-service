@@ -45,9 +45,9 @@ public class TravelmodeController {
     @ApiImplicitParam(name = "userName", value = "user name")
     public ResponseEntity<?> getTravelModeOfSpecificUser(@RequestParam final String userName) {
 		Repository feedbackRepository = RDF4JRepositoryHandler.getRepository("travelmodedata");
-		String queryString = "@PREFIX foaf: <http://xmlns.com/foaf/spec/> \n"
-				+ "@PREFIX  smf: <http://www.dfki.de/SmartMaaS/feedback#> \n"
-				+ "@PREFIX  time: <http://www.w3.org/2006/time#> \n"
+		String queryString = "PREFIX foaf: <http://xmlns.com/foaf/spec/> \n"
+				+ "PREFIX  smf: <http://www.dfki.de/SmartMaaS/feedback#> \n"
+				+ "PREFIX  time: <http://www.w3.org/2006/time#> \n"
 				+ "CONSTRUCT ?t a smf:Travelmode . \n"
 				+ "WHERE { \n"
 				+ userName + " smf:travelsBy ?t. \n"
@@ -66,10 +66,10 @@ public class TravelmodeController {
 	@ApiOperation(value = "Get all users who are currently travelling by a certain means of transport")
     @GetMapping(value = "/travelmode/byBus", produces = "application/ld+json")
     public ResponseEntity<?> getUserOnBus(@RequestParam final String vehicleType) {
-		String queryString = "@PREFIX foaf: <http://xmlns.com/foaf/spec/> \n"
-				+ "@PREFIX  smf: <http://www.dfki.de/SmartMaaS/feedback#> \n"
-				+ "@PREFIX  time: <http://www.w3.org/2006/time#> \n"
 		Repository feedbackRepository = RDF4JRepositoryHandler.getRepository("travelmodedata");
+		String queryString = "PREFIX foaf: <http://xmlns.com/foaf/spec/> \n"
+				+ "PREFIX  smf: <http://www.dfki.de/SmartMaaS/feedback#> \n"
+				+ "PREFIX  time: <http://www.w3.org/2006/time#> \n"
 				+ "CONSTRUCT ?u smf:travelsBy " + vehicleType + " . \n"
 				+ "WHERE { \n"
 				+ " SELECT DISTINCT ?user smf:travelsBy " + vehicleType + " AS ?u WHERE { \n"
