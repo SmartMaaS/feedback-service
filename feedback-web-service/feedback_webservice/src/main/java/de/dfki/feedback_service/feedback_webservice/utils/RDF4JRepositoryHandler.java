@@ -14,6 +14,9 @@ import org.eclipse.rdf4j.repository.sail.config.SailRepositoryConfig;
 import org.eclipse.rdf4j.sail.memory.config.MemoryStoreConfig;
 
 import java.util.Collection;
+import org.eclipse.rdf4j.query.TupleQuery;
+import org.eclipse.rdf4j.query.TupleQueryResult;
+import org.eclipse.rdf4j.query.algebra.Not;
 
 public class RDF4JRepositoryHandler {
     private final static String rdf4jServer = "http://localhost:8090/rdf4j";
@@ -26,6 +29,16 @@ public class RDF4JRepositoryHandler {
 
         return initialize(repository);
     }
+
+	public static TupleQueryResult performSparqlQuery (final String queryString, final Repository repo) {
+		try (RepositoryConnection conn = repo.getConnection()) {
+			TupleQuery query = conn.prepareTupleQuery(queryString);
+			TupleQueryResult result = query.evaluate();
+			return result;
+		} catch (Exception ex) {
+			throw new RepositoryException("Could not perform query: "+(ex.getMessage()));
+		}
+	}
 
     public static Repository createRemoteRepository(final String repoID) throws RepositoryConfigException, RepositoryException {
         RepositoryManager repositoryManager = RepositoryProvider.getRepositoryManager(rdf4jServer);
