@@ -71,18 +71,18 @@ public class TravelmodeController {
 		String queryString = "PREFIX foaf: <http://xmlns.com/foaf/spec/> \n"
 				+ "PREFIX  smf: <http://www.dfki.de/SmartMaaS/feedback#> \n"
 				+ "PREFIX  time: <http://www.w3.org/2006/time#> \n"
-				+ "CONSTRUCT ?u smf:travelsBy " + vehicleType + " . \n"
+				+ "DESCRIBE ?travelmode \n"
 				+ "WHERE { \n"
-				+ " SELECT DISTINCT ?user smf:travelsBy " + vehicleType + " AS ?u WHERE { \n"
-				+ " ?travelmode foaf:accountName ?user \n"
-				+ "	?travelmode time:xsdDateTime ?t \n"
-				+ "	 FILTER NOT EXISTS { \n"
-				+ "	?travelmode foaf:accountName ?user \n"
-				+ "	?travelmode time:xsdDateTime ?t2"
+				+ " ?travelmode smf:travelsBy " + vehicleType + " . \n"
+				+ " ?travelmode foaf:accountName ?user . \n"
+				+ "	?travelmode time:xsdDateTime ?t .\n"
+				+ "	FILTER NOT EXISTS {\n"
+				+ "	?travelmode foaf:accountName ?user . \n"
+				+ " ?travelmode time:xsdDateTime ?t2 . \n"
 				+ "	filter (?t2 > ?t) \n"
-				+ "		}"
-				+ "	}"
+				+ "	} \n"
 				+ "}";
+		System.out.println("Sending query: \n" + queryString);
 		try (RepositoryConnection conn = feedbackRepository.getConnection()) {
 			ByteArrayOutputStream modelAsJsonLd = getQueryResultAsJsonLD(conn, queryString);
 			return new ResponseEntity<>(modelAsJsonLd.toString(StandardCharsets.UTF_8), HttpStatus.OK);
