@@ -138,19 +138,24 @@ public class TravelmodeController {
 					second -= 60;
 					minute += 1;
 				}
+				String secondString = zeroPrefix(second);
 				if (minute>60) {
 					minute -= 60;
 					hour += 1;
 				}
+				String minuteString = zeroPrefix(minute);
 				if (hour > 23) {
 					day +=1 ;
 				}
+				String hourString = zeroPrefix(hour);
+				String dayString = zeroPrefix(day);
+				String monthString = zeroPrefix(month);
 				builder.defaultGraph()
 						.subject("exf:travelmodedata"+UUID.randomUUID())
 						.add("foaf:accountName", userName)
 						.add("smf:travelsBy", meansOfTransport[transportIndex])
-						.add("time:xsdDateTime", year +"-"+month+"-"+day+"T"
-								+ hour +":" +minute+":"+second);
+						.add("time:xsdDateTime", year +"-"+monthString+"-"+dayString+"T"
+								+ hourString +":" +minuteString+":"+secondString);
 			}
 			try (RepositoryConnection con = travelModeRepository.getConnection()) {
 				con.add(builder.build());
@@ -160,4 +165,12 @@ public class TravelmodeController {
 		}
 		return new ResponseEntity<>(HttpStatus.OK);
     }
+
+	private String zeroPrefix(int inputString) {
+		String resultString = "";
+		resultString += inputString;
+		if (resultString.length() != 2)
+			resultString="0" + resultString;
+		return resultString;
+	}
 }
