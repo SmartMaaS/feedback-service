@@ -8,6 +8,7 @@ import de.dfki.feedback_service.feedback_webservice.utils.Utils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import org.eclipse.rdf4j.model.Model;
 import org.eclipse.rdf4j.rio.RDFFormat;
@@ -18,13 +19,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.eclipse.rdf4j.query.GraphQuery;
 import org.eclipse.rdf4j.query.GraphQueryResult;
 import org.eclipse.rdf4j.query.QueryResults;
 import org.eclipse.rdf4j.repository.Repository;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
+import org.eclipse.rdf4j.rio.RDFParseException;
 import org.eclipse.rdf4j.rio.Rio;
+import org.eclipse.rdf4j.rio.UnsupportedRDFormatException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -158,6 +164,26 @@ public class FeedbackController {
 			return new ResponseEntity<>(modelAsTurtle.toString(), HttpStatus.OK);
 		} catch (Exception ex) {
 			return new ResponseEntity<>("Could not get feedbacks: " + ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+    }
+
+	@ApiOperation(value = "Provide JSON-LD version of a ttl input")
+    @PostMapping(value = "/ttlToJson", consumes = "text/turtle", produces = "application/ld+json")
+    @ApiImplicitParam(name = "turtleInput", value = "Turtle Input",
+            example = Feedback.example, format = "text/turtle")
+    public ResponseEntity<?> convertTtlToJsonLd(@RequestBody final String turtleInput) {
+		InputStream turtleInputStream = new ByteArrayInputStream(turtleInput.getBytes(StandardCharsets.UTF_8));
+		try {
+			Model modelFromTurtle = Rio.parse(turtleInputStream, "", RDFFormat.TURTLE);
+			ByteArrayOutputStream modelAsJsonLd = new ByteArrayOutputStream();
+			Rio.write(modelFromTurtle, modelAsJsonLd, RDFFormat.JSONLD);
+			return new ResponseEntity<>(modelAsJsonLd.toString(StandardCharsets.UTF_8), HttpStatus.OK);
+		} catch (IOException ex) {
+			return new ResponseEntity<>("Could not handle input: " + ex.toString(), HttpStatus.INTERNAL_SERVER_ERROR);
+		} catch (RDFParseException ex) {
+			return new ResponseEntity<>("Could not parse RDF: " + ex.toString(), HttpStatus.BAD_REQUEST);
+		} catch (UnsupportedRDFormatException ex) {
+			return new ResponseEntity<>("RDF format not supported: " + ex.toString(), HttpStatus.UNSUPPORTED_MEDIA_TYPE);
 		}
     }
 }
