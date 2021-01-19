@@ -56,6 +56,34 @@ public class TravelmodeController {
 			return new ResponseEntity<>("Could not get travelmode: " + ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
     }
+
+	@ApiOperation(value = "Get all users who are currently travelling by a certain means of transport")
+    @GetMapping(value = "/travelmode/byBus", produces = "application/ld+json")
+    public ResponseEntity<?> getUserOnBus(@RequestParam final String vehicleType) {
+		Repository feedbackRepository = RDF4JRepositoryHandler.getRepository("travel_mode");
+		String queryString = "@PREFIX foaf: <http://xmlns.com/foaf/spec/> \n"
+				+ "@PREFIX  smf: <http://www.dfki.de/SmartMaaS/feedback#> \n"
+				+ "@PREFIX  time: <http://www.w3.org/2006/time#> \n"
+				+ "CONSTRUCT ?u smf:travelsBy " + vehicleType + " . \n"
+				+ "WHERE { \n"
+				+ " SELECT DISTINCT ?user smf:travelsBy " + vehicleType + " AS ?u WHERE { \n"
+				+ " ?travelmode foaf:accountName ?user \n"
+				+ "	?travelmode time:xsdDateTime ?t \n"
+				+ "	 FILTER NOT EXISTS { \n"
+				+ "	?travelmode foaf:accountName ?user \n"
+				+ "	?travelmode time:xsdDateTime ?t2"
+				+ "	filter (?t2 > ?t) \n"
+				+ "		}"
+				+ "	}"
+				+ "}";
+		try (RepositoryConnection conn = feedbackRepository.getConnection()) {
+			ByteArrayOutputStream modelAsJsonLd = getQueryResultAsJsonLD(conn, queryString);
+			return new ResponseEntity<>(modelAsJsonLd.toString(StandardCharsets.UTF_8), HttpStatus.OK);
+		} catch (Exception ex) {
+			return new ResponseEntity<>("Could not get travelmode: " + ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+    }
+
 	private ByteArrayOutputStream getQueryResultAsJsonLD(final RepositoryConnection conn, String queryString) throws RepositoryException, QueryEvaluationException, MalformedQueryException, RDFHandlerException {
 		GraphQuery query = conn.prepareGraphQuery(queryString);
 		GraphQueryResult travelMode = query.evaluate();
