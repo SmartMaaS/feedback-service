@@ -65,7 +65,7 @@ public class TravelmodeController {
     }
 
 	@ApiOperation(value = "Get all users who are currently travelling by a certain means of transport")
-    @GetMapping(value = "/travelmode/byBus", produces = "application/ld+json")
+    @GetMapping(value = "/travelmode/byVehicleType", produces = "application/ld+json")
     public ResponseEntity<?> getUserOnBus(@RequestParam final String vehicleType) {
 		Repository feedbackRepository = RDF4JRepositoryHandler.getRepository("travelmodedata");
 		String queryString = "PREFIX foaf: <http://xmlns.com/foaf/spec/> \n"
