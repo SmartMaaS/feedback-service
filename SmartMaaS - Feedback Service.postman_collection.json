@@ -1,0 +1,313 @@
+{
+	"info": {
+		"_postman_id": "de1fb369-0f2e-47b9-b2e0-b17f6eb8e9f5",
+		"name": "SmartMaaS - Feedback Service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "FS: Get repository list",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8090/rdf4j/repositories",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8090",
+					"path": [
+						"rdf4j",
+						"repositories"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "FS: Get protocol version",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8090/rdf4j/protocol",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8090",
+					"path": [
+						"rdf4j",
+						"protocol"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "FS: Construct Query to \"feedback_repository\"",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"accept": true
+				}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/rdf+xml",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/sparql-query",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "construct {?s ?p ?o} where {?s ?p ?o}"
+				},
+				"url": {
+					"raw": "http://localhost:8090/rdf4j/repositories/feedback_repository",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8090",
+					"path": [
+						"rdf4j",
+						"repositories",
+						"feedback_repository"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "FS: SELECT, ASK, CONSTRUCT queries to \"feedback_repository\"",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8090/rdf4j/repositories/feedback_repository?query=construct {?s ?p ?o} where {?s ?p ?o}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8090",
+					"path": [
+						"rdf4j",
+						"repositories",
+						"feedback_repository"
+					],
+					"query": [
+						{
+							"key": "query",
+							"value": "prefix exf: <http://www.example.fe/edback#> prefix base: <http://www.dfki.de/SmartMaaS/feedback#> select ?s ?o where {?s rdf:type ?o}",
+							"description": "Select query",
+							"disabled": true
+						},
+						{
+							"key": "query",
+							"value": "prefix exf: <http://www.example.fe/edback#> prefix base: <http://www.dfki.de/SmartMaaS/feedback#> ask  {?s rdf:type ?o}",
+							"description": "Ask query",
+							"disabled": true
+						},
+						{
+							"key": "query",
+							"value": "construct {?s ?p ?o} where {?s ?p ?o}",
+							"description": "Construct query"
+						},
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "FS: Set namespace for \"rdf\" in \"feedback_repository\"",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+				},
+				"url": {
+					"raw": "http://localhost:8090/rdf4j/repositories/feedback_repository/namespaces/rdf",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8090",
+					"path": [
+						"rdf4j",
+						"repositories",
+						"feedback_repository",
+						"namespaces",
+						"rdf"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "FS: Get all declared prefixes for \"feedback_repository\"",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8090/rdf4j/repositories/feedback_repository/namespaces",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8090",
+					"path": [
+						"rdf4j",
+						"repositories",
+						"feedback_repository",
+						"namespaces"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "FS: Delete all declared namespaces",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8090/rdf4j/repositories/feedback_repository/namespaces",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8090",
+					"path": [
+						"rdf4j",
+						"repositories",
+						"feedback_repository",
+						"namespaces"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "FS: Get namespace for \"rdf\"",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8090/rdf4j/repositories/feedback_repository/namespaces/rdf",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8090",
+					"path": [
+						"rdf4j",
+						"repositories",
+						"feedback_repository",
+						"namespaces",
+						"rdf"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "FS: Get all statements in \"feedback_repository\"",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8090/rdf4j/repositories/feedback_repository/statements",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8090",
+					"path": [
+						"rdf4j",
+						"repositories",
+						"feedback_repository",
+						"statements"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "FS: Add triples to \"feedback_repository\"",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "<http://www.example.fe/edback#fe> <http://www.example.fe/edback#ed>  <http://www.example.fe/edback#back>."
+				},
+				"url": {
+					"raw": "http://localhost:8090/rdf4j/repositories/feedback_repository/statements?context=null",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8090",
+					"path": [
+						"rdf4j",
+						"repositories",
+						"feedback_repository",
+						"statements"
+					],
+					"query": [
+						{
+							"key": "context",
+							"value": "null"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "FS: Get repository size",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8090/rdf4j/repositories/feedback_repository/size",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8090",
+					"path": [
+						"rdf4j",
+						"repositories",
+						"feedback_repository",
+						"size"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}

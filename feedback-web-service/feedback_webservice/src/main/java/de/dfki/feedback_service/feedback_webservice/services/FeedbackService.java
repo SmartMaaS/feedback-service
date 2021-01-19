@@ -1,11 +1,16 @@
 package de.dfki.feedback_service.feedback_webservice.services;
 
 import de.dfki.feedback_service.feedback_webservice.models.*;
+import de.dfki.feedback_service.feedback_webservice.utils.RDF4JRepositoryHandler;
 import de.dfki.feedback_service.feedback_webservice.utils.Utils;
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Model;
 import org.eclipse.rdf4j.model.Statement;
 import org.eclipse.rdf4j.model.Value;
+import org.eclipse.rdf4j.query.BindingSet;
+import org.eclipse.rdf4j.query.TupleQuery;
+import org.eclipse.rdf4j.query.TupleQueryResult;
+import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.eclipse.rdf4j.rio.RDFFormat;
 import org.eclipse.rdf4j.rio.Rio;
 import org.springframework.stereotype.Component;
@@ -17,14 +22,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 @Component
 public class FeedbackService implements ThreadCompleteListener {
+    private static final Logger LOGGER = Logger.getLogger(FeedbackService.class.getName());
     private String turtleFeedback;
     private NearByStops nearByStops;
     private Feedback feedback;
     private int page, size;
     private String token;
+    private static final String feedbackIDKeyword = "Feedback_xxx";
 
     public Feedback convert_JSON_or_XML_to_FEEDBACK(String feedbackMssg) throws Exception {
         if (Utils.isValidXml(feedbackMssg)) {
@@ -263,4 +271,48 @@ public class FeedbackService implements ThreadCompleteListener {
     public void setToken(String token) {
         this.token = token;
     }
+
+    public String setFeedbackID(String feedbackMessage) {
+        int ID = 0;
+        String feedbackWithID_Regex = ".+#(Feedback|feedback)\\d+";
+        String subjectKeyword = "s";
+        String queryString = "PREFIX base:  <http://www.dfki.de/SmartMaaS/feedback#>\n" +
+                "PREFIX rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
+                "SELECT ?" + subjectKeyword + "\n" +
+                "WHERE {\n" +
+                "?" + subjectKeyword + " rdf:type base:Feedback.\n" +
+                "}";
+        try (RepositoryConnection repositoryConnection =
+                     RDF4JRepositoryHandler.getFeedbackRepository().getConnection()) {
+            TupleQuery tupleQuery = repositoryConnection.prepareTupleQuery(queryString);
+            try (TupleQueryResult queryResult = tupleQuery.evaluate()) {
+                while (queryResult.hasNext()) {
+                    BindingSet bindings = queryResult.next();
+                    Value valueOfS = bindings.getValue(subjectKeyword);
+
+                    if (valueOfS.stringValue().matches(feedbackWithID_Regex)) {
+                        String feedbackIdStr = valueOfS.stringValue().replaceAll(".+#(Feedback|feedback)", "");
+                        try {
+                            int feedbackId = Utils.string2Integer(feedbackIdStr);
+                            if (feedbackId > ID) {
+                                ID = feedbackId;
+                            }
+                        } catch (NumberFormatException e) {
+                            LOGGER.info("The subject --" + valueOfS.stringValue() + "-- produces the " +
+                                    "error --" + e.getLocalizedMessage() + "--");
+                        }
+                    }
+                }
+            }
+        }
+        /* !!!!!!
+         Feedback app is unaware of the amount of feedback messages in feedback repository.
+         Therefore, instead of a correct Feedback ID, it writes "Feedback_xxx" which is replaced with
+         the correct Feedback ID in feedback service.
+        */
+        String feedbackID = "Feedback" + (ID + 1);
+        return feedbackMessage.replaceAll(feedbackIDKeyword, feedbackID);
+    }
+
+
 }

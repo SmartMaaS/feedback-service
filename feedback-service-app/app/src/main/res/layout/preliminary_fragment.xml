@@ -10,9 +10,9 @@
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="70dp"
         android:gravity="center_horizontal|center_vertical"
         android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/guideline"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -21,30 +21,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/almendra"
-            android:text="@string/smart"
+            android:text="@string/feedback_service"
             android:textAlignment="center"
+            android:textAllCaps="false"
             android:textColor="#A7A019"
-            android:textSize="36sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/almendra"
-            android:text="@string/maas"
-            android:textAlignment="center"
-            android:textColor="#A7A019"
-            android:textSize="36sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/almendra"
-            android:text="@string/mobile"
-            android:textAlignment="center"
-            android:textColor="#A7A019"
-            android:textSize="36sp"
+            android:textSize="40sp"
             android:textStyle="bold" />
 
     </LinearLayout>
@@ -60,5 +41,12 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="365dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

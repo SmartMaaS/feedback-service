@@ -1,23 +1,24 @@
 <resources>
     <array name="measurementSpinnerEntries">
-        <item>minute</item>
-        <item>second</item>
-        <item>hour</item>
-        <item>day</item>
+        <item>Minute</item>
+        <item>Second</item>
+        <item>Hour</item>
+        <item>Day</item>
     </array>
     <array name="vehicleSpinnerEntries">
         <item>bus</item>
         <item>train</item>
         <item>car</item>
-        <item>bike</item>
-        <item>foot</item>
+        <item>bicycle</item>
     </array>
     <string name="app_name">Feedback Service</string>
+    <string name="feedback_service">Feedback Service</string>
     <string name="smart">SMART</string>
     <string name="maas">MAAS</string>
     <string name="mobile">MOBILE</string>
     <string name="word_email">Email:</string>
-    <string name="word_password">Password:</string>
+    <string name="word_username">Username:</string>
+    <string name="word_password">(Optional) Password:</string>
     <string name="word_stayLogged">Keep me logged in</string>
     <string name="word_login">Login</string>
     <string name="word_registr">Register</string>
@@ -28,23 +29,33 @@
     <string name="word_contact">Contact</string>
     <string name="word_rate_app">Rate the App</string>
     <string name="word_about">About</string>
-    <string name="fill_empty_slot">Please, fill mandatory slots!</string>
+    <string name="fill_empty_slot">Fill mandatory slots, please!</string>
     <string name="add_info">Additional Info:</string>
     <string name="word_address">Address</string>
-    <string name="reason_rain_title">Rain</string>
+<!--    Reasons -->
+<!--    Permanent-->
     <string name="reason_broken_jam_title">Broken Traffic Light</string>
-    <string name="reason_crash_title">Crash</string>
+    <string name="reason_failing_info_board_title">Failing Info Board</string>
+    <string name="reason_pothole_title">Pothole</string>
+    <string name="reason_malfunctioning_vehicle_title">Malfunctioning Vehicle</string>
+<!--    Passing-->
+    <string name="reason_detour_title">Detour</string>
     <string name="reason_traffic_jam_title">Traffic Jam</string>
-    <string name="reason_maintenance_title">Maintenance</string>
+    <string name="reason_fog_title">Fog</string>
+    <string name="reason_rain_title">Rain</string>
+    <string name="reason_snow_title">Snow</string>
+<!--    Other-->
     <string name="reason_other_title">Other</string>
+<!--    Reasons -->
     <string name="word_yes">Yes</string>
     <string name="word_no">No</string>
-    <string name="feedback_web_service_url">http://192.168.0.102:8803/feedback</string>
+    <string name="feedback_web_service_url">http://172.16.7.154:8803/feedback_service/feedback</string>
+    <string name="alternative_routes_web_service_url">http://192.168.0.102:8804/alternativeRoutes</string>
     <string name="word_in">In</string>
     <string name="word_on">On</string>
     <string name="in_or_on">Vehicle:</string>
     <string name="vehicle_number">No:</string>
-    <string name="try_again">Try again please!</string>
+    <string name="try_again">Try again, please!</string>
     <string-array name="formats">
         <item>TURTLE</item>
         <item>TTL</item>
@@ -88,7 +99,7 @@
     <string name="token_header_key">Current-Token_FBase</string>
     <string name="page_header_key">Page</string>
     <string name="size_header_key">Size</string>
-    <string name="radius_message">Radius: %1$d km</string>
+<!--    <string name="radius_message">Radius: %1$d km</string>-->
     <string name="size_message">Size: %1$d items</string>
     <string name="more_stops_success_message">Obtaining %1$s more results</string>
     <string name="nearby_stops_title">Nearby Stops \n   %1$s of %2$s</string>
@@ -101,7 +112,7 @@
     <string name="user_id_key_shrd_prfs">UID</string>
     <string name="size_SH_PR_key">size_value_key_536</string>
     <string name="firebase_token_SH_PR_key">firebase_token_536</string>
-    <string name="nearby_stops_radius_SH_PR_key">nearby_stops_radius_key_536</string>
+<!--    <string name="nearby_stops_radius_SH_PR_key">nearby_stops_radius_key_536</string>-->
     <string name="nearby_stops_data_SH_PR_key">nearby_stops_data_key__536</string>
     <string name="notification_divider">###</string>
     <string name="feedback_object_SH_PR_key">latest_feedback_object_in_json_key</string>
@@ -125,9 +136,11 @@
     <string name="headers_content_type_message">Content-Type</string>
     <string name="fbs_error_message">Feedback Web Service Error:</string>
     <string name="more_stops_error_message">Sorry, couldn\'t fetch more results.</string>
-    <string name="enter_email_text">Please enter email!</string>
-    <string name="enter_password_text">Please enter password!</string>
+    <string name="enter_username_text">Enter username, please!</string>
+    <string name="enter_password_text">Enter password, please!</string>
     <string name="first_page_from_feedbackWS">1</string>
     <string name="error_notification_message">Try again, please!</string>
     <string name="no_data_found_shrd_prfs">Attention!!! No Data found for the key</string>
+    <string name="username_key_shrd_prf">username_key</string>
+    <string name="password_key_shrd_prf">password_key</string>
 </resources>

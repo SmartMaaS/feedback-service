@@ -1,7 +1,7 @@
 package dfki.com.smartmaas.feedbackservice.model;
 
 public class Location {
-    private static final String tag = "Location";
+    private static final String TAG = Location.class.getName();
     private String name;
     private double lat;
     private double lng;
@@ -46,6 +46,6 @@ public class Location {
     }
 
     public static String getTag() {
-        return tag;
+        return TAG;
     }
 }

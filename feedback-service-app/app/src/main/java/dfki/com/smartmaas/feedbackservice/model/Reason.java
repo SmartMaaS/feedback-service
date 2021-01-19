@@ -1,12 +1,14 @@
 package dfki.com.smartmaas.feedbackservice.model;
 
 public class Reason {
-    private static final String tag = "Reason";
-    private String name;
+    private static final String TAG = Reason.class.getName();
+    public static final String PERMANENT_REASON = "PermanentReason", PASSING_REASON = "PassingReason", OTHER_REASON = "OtherReason";
+    private String name, type;
     private String additionalInfo;
 
-    public Reason(String name) {
+    public Reason(String name, String type) {
         this.name = name;
+        this.type = type;
     }
 
     public String getName() {
@@ -26,6 +28,14 @@ public class Reason {
     }
 
     public static String getTag() {
-        return tag;
+        return TAG;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

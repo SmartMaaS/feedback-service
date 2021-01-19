@@ -13,20 +13,21 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-import com.google.firebase.auth.FirebaseAuth;
-
 import dfki.com.smartmaas.feedbackservice.R;
 import dfki.com.smartmaas.feedbackservice.activity.MainActivity;
 import dfki.com.smartmaas.feedbackservice.model.CustomFragment;
 import dfki.com.smartmaas.feedbackservice.util.Utils;
 
+//import com.google.firebase.auth.FirebaseAuth;
+
 
 public class ProfileFragment extends CustomFragment {
-    private static final String tag = "ProfileFragment";
+    private static final String TAG = ProfileFragment.class.getName();
     private Button logOutButton;
     private SharedPreferences sharedPreferences;
     private MainActivity activity;
     private ConstraintLayout navigationMenu;
+    private TextView usernameTxView;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -49,18 +50,22 @@ public class ProfileFragment extends CustomFragment {
 
     private void initialiseViews(View view) {
         logOutButton = view.findViewById(R.id.logOutBttnID);
-        TextView emailTextView = view.findViewById(R.id.emailTxVwIDPrflFrgmnt);
-        emailTextView.setText(sharedPreferences.getString(
-                getResources().getString(R.string.user_email_shrd_prf_key), null));
+//        TextView emailTextView = view.findViewById(R.id.emailTxVwIDPrflFrgmnt);
+//        emailTextView.setText(sharedPreferences.getString(
+//                getResources().getString(R.string.user_email_shrd_prf_key), null));
         navigationMenu = activity.findViewById(R.id.container);
+        usernameTxView = view.findViewById(R.id.usernameTxVwIDPrflFragment);
+        usernameTxView.setText("Username: " + Utils.fetchStringFromPreferences(activity.getApplicationContext(),
+                getResources().getString(R.string.username_key_shrd_prf)));
     }
 
     private void initialiseLogOutBttn() {
         logOutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FirebaseAuth.getInstance().signOut();
-                sharedPreferences.edit().clear().apply();
+//                FirebaseAuth.getInstance().signOut();
+
+                Utils.cleanSharedPreferences(activity.getApplicationContext());
                 openLoginFragment();
             }
         });
@@ -75,6 +80,6 @@ public class ProfileFragment extends CustomFragment {
 
     @Override
     public String getCustomTAG() {
-        return tag;
+        return TAG;
     }
 }

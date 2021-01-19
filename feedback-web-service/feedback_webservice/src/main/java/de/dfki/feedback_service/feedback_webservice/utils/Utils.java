@@ -3,6 +3,7 @@ package de.dfki.feedback_service.feedback_webservice.utils;
 import com.google.firebase.messaging.Notification;
 import com.google.gson.Gson;
 import de.dfki.feedback_service.feedback_webservice.models.*;
+import org.apache.commons.lang3.StringUtils;
 import org.eclipse.rdf4j.model.*;
 import org.eclipse.rdf4j.rio.RDFFormat;
 import org.eclipse.rdf4j.rio.Rio;
@@ -30,6 +31,7 @@ import javax.xml.parsers.SAXParserFactory;
 import java.io.*;
 import java.nio.charset.Charset;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -37,6 +39,18 @@ public class Utils {
     public static Model rdfToModel(String rdfString, RDFFormat rdfFormat) throws IOException {
         InputStream inputStream = new ByteArrayInputStream(rdfString.getBytes());
         return Rio.parse(inputStream, "", rdfFormat);
+    }
+
+    public static void printRDF4JModel(Model model) {
+        System.out.println("Namespaces: ");
+        for (Namespace n : model.getNamespaces()) {
+            System.out.println(n);
+        }
+        System.out.println("\n\n");
+        Iterator<Statement> statementIterator = model.iterator();
+        while (statementIterator.hasNext()) {
+            System.out.println(statementIterator.next());
+        }
     }
 
     public static Feedback convertXmlToFeedback(String xmlFeedback) {
@@ -370,5 +384,13 @@ public class Utils {
             }
             return (dist);
         }
+    }
+
+    public static int string2Integer(String s) throws NumberFormatException {
+        if (StringUtils.isNumeric(s)) {
+            return Integer.parseInt(s);
+        } else throw new NumberFormatException("The input -" + s + ": is not numeric");
+
+
     }
 }
