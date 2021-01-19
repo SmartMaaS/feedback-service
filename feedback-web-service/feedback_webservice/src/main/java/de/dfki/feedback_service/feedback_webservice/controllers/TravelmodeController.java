@@ -7,7 +7,13 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import java.io.ByteArrayOutputStream;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.Set;
+import java.util.UUID;
 import org.eclipse.rdf4j.model.Model;
+import org.eclipse.rdf4j.model.util.ModelBuilder;
 import org.eclipse.rdf4j.query.GraphQuery;
 import org.eclipse.rdf4j.query.GraphQueryResult;
 import org.eclipse.rdf4j.query.MalformedQueryException;
@@ -38,7 +44,7 @@ public class TravelmodeController {
     @GetMapping(value = "/travelmode", produces = "application/ld+json")
     @ApiImplicitParam(name = "userName", value = "user name")
     public ResponseEntity<?> getTravelModeOfSpecificUser(@RequestParam final String userName) {
-		Repository feedbackRepository = RDF4JRepositoryHandler.getRepository("travel_mode");
+		Repository feedbackRepository = RDF4JRepositoryHandler.getRepository("travelmodedata");
 		String queryString = "@PREFIX foaf: <http://xmlns.com/foaf/spec/> \n"
 				+ "@PREFIX  smf: <http://www.dfki.de/SmartMaaS/feedback#> \n"
 				+ "@PREFIX  time: <http://www.w3.org/2006/time#> \n"
@@ -60,10 +66,10 @@ public class TravelmodeController {
 	@ApiOperation(value = "Get all users who are currently travelling by a certain means of transport")
     @GetMapping(value = "/travelmode/byBus", produces = "application/ld+json")
     public ResponseEntity<?> getUserOnBus(@RequestParam final String vehicleType) {
-		Repository feedbackRepository = RDF4JRepositoryHandler.getRepository("travel_mode");
 		String queryString = "@PREFIX foaf: <http://xmlns.com/foaf/spec/> \n"
 				+ "@PREFIX  smf: <http://www.dfki.de/SmartMaaS/feedback#> \n"
 				+ "@PREFIX  time: <http://www.w3.org/2006/time#> \n"
+		Repository feedbackRepository = RDF4JRepositoryHandler.getRepository("travelmodedata");
 				+ "CONSTRUCT ?u smf:travelsBy " + vehicleType + " . \n"
 				+ "WHERE { \n"
 				+ " SELECT DISTINCT ?user smf:travelsBy " + vehicleType + " AS ?u WHERE { \n"
@@ -92,5 +98,65 @@ public class TravelmodeController {
 		Rio.write(resultModel, modelAsJsonLd, RDFFormat.JSONLD);
 		return modelAsJsonLd;
 	}
+
+	@ApiOperation(value = "Generate test data")
+    @PostMapping(value = "/travelmode/generateTestData", produces = "application/ld+json")
+    public ResponseEntity<?> generateTestData(@RequestParam final int number) {
+		Repository travelModeRepository = RDF4JRepositoryHandler.getRepository("travelmodedata");
+		ModelBuilder builder = new ModelBuilder();
+		builder.setNamespace("foaf", "http://xmlns.com/foaf/spec/");
+		builder.setNamespace("smf", "http://www.dfki.de/SmartMaaS/feedback#");
+		builder.setNamespace("time", "http://www.w3.org/2006/time#");
+		builder.setNamespace("exf", "http://www.example.fe/edback#");
+		String[] meansOfTransport = new String[5];
+		meansOfTransport[0] = "smf:Bicycle";
+		meansOfTransport[1] = "smf:Bus";
+		meansOfTransport[2] = "smf:Train";
+		meansOfTransport[3] = "smf:Car";
+		meansOfTransport[4] = "smf:OnFoot";
+		for (int i=0; i<number; i++) {
+			//generate random user
+			int userNumber = (int) Math.floor(Math.random() * 20);
+			String userName = "user" + userNumber;
+			//generate random means of transport
+			int transportIndex = (int) Math.floor(Math.random() * 5);
+			//generate random time stamp
+			int yearOffset = (int) (Math.random() * 2);
+			int year = 2021 - yearOffset;
+			int month = (int) (Math.random() * 12 + 1);
+			int day = (int) (Math.random() * 27);
+			int hour = (int) (Math.random() * 24);
+			int minute = (int) (Math.random() * 60);
+			int second = (int) (Math.random() * 60);
+			//generate random time span
+			int timesteps = (int) (Math.random() * 12);
+			//generate triples
+			for (int t=0; t<timesteps; t++) {
+				second = second + t*5;
+				if (second > 60) {
+					second -= 60;
+					minute += 1;
+				}
+				if (minute>60) {
+					minute -= 60;
+					hour += 1;
+				}
+				if (hour > 23) {
+					day +=1 ;
+				}
+				builder.defaultGraph()
+						.subject("exf:travelmodedata"+UUID.randomUUID())
+						.add("foaf:accountName", userName)
+						.add("smf:travelsBy", meansOfTransport[transportIndex])
+						.add("time:xsdDateTime", year +"-"+month+"-"+day+"T"
+								+ hour +":" +minute+":"+second);
+			}
+			try (RepositoryConnection con = travelModeRepository.getConnection()) {
+				con.add(builder.build());
+			} catch (Exception ex) {
+				return new ResponseEntity<>("Something went wrong: " + ex.toString(), HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+		}
+		return new ResponseEntity<>(HttpStatus.OK);
     }
 }
