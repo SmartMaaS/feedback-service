@@ -19,8 +19,11 @@ import org.eclipse.rdf4j.query.TupleQueryResult;
 import org.eclipse.rdf4j.query.algebra.Not;
 
 public class RDF4JRepositoryHandler {
-    private final static String rdf4jServer = "http://localhost:8090/rdf4j";
+    private static String rdf4jServer = "http://localhost:8090/rdf4j";
 
+	public static void setServer(String serverlocation) {
+		rdf4jServer = serverlocation;
+	}
     public static Repository getRepository(String repoID) {
         Repository repository = RepositoryProvider.getRepositoryManager(rdf4jServer).getRepository(repoID);
         if (repository == null) {
