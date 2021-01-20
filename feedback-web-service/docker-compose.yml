@@ -14,5 +14,5 @@ services:
         build: ./feedback_webservice
         ports:
             - "8803:8803"
-        
+        command: java -jar /feedback-service/app/feedback_webservice-0.0.1-SNAPSHOT.jar http://triplestore:8090/rdf4j
 
