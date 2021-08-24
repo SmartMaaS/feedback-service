@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.location.Address;
 import android.location.Geocoder;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
@@ -31,6 +33,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.security.KeyManagementException;
@@ -41,10 +45,14 @@ import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
@@ -59,7 +67,7 @@ import dfki.com.smartmaas.feedbackservice.exception.InvalidLocationNameException
 
 
 public class Utils {
-    public static final String tag = "Utils";
+    private static final String TAG = Utils.class.getName();
     private static LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
             ConstraintLayout.LayoutParams.MATCH_PARENT,
             ConstraintLayout.LayoutParams.MATCH_PARENT,
@@ -82,12 +90,20 @@ public class Utils {
         return layoutParams;
     }
 
+    /*
+    @throws IOException if input latitude and longitude cannot be converted to a valid address.
+     */
     public static String convertLatLongToAddress(double lat, double lng, MainActivity mainActivity) throws IOException {
         Geocoder geocoder = new Geocoder(mainActivity, Locale.getDefault());
-        List<Address> addresses = geocoder.getFromLocation(lat, lng, 1);
+        List<Address> addresses;
+        addresses = geocoder.getFromLocation(lat, lng, 1);
         return addresses.get(0).getAddressLine(0);
     }
 
+    /*
+    @throws IOException if input address name cannot be converted to latitude and longitude.
+    @throws InvalidLocationNameException  if input address name is not a valid address.
+     */
     public static HashMap<String, Double> convertAddressToLatLng(String addressName, MainActivity mainActivity) throws IOException, InvalidLocationNameException {
         Geocoder geocoder = new Geocoder(mainActivity, Locale.getDefault());
         List<Address> addresses = geocoder.getFromLocationName(addressName, 1);
@@ -101,6 +117,9 @@ public class Utils {
         return location;
     }
 
+    /*
+    @throws JsonProcessingException if input object is not a valid json. There might be other causes as well.
+     */
     public static String convertToJson(Object object) throws JsonProcessingException {
         if (object == null)
             return "";
@@ -127,33 +146,50 @@ public class Utils {
 
     public static void sendRequestToFeedbackWebService(Context context, String data, String webServiceUrl, String contentType,
                                                        HashMap<String, String> moreHeaders,
-                                                       String successMsg, String errorMsg) {
+                                                       String successMsg, String errorMsg) throws IOException {
         HttpsURLConnection httpsURLConnection;
 
+        URL request_url;
         try {
-            URL request_url = new URL(webServiceUrl);
+            request_url = new URL(webServiceUrl);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            String erMsg = "URL(" + webServiceUrl + ") cannot be parsed.";
+//            Log.e(TAG, erMsg);
+            throw new MalformedURLException(erMsg);
+        }
 
+        try {
             httpsURLConnection = (HttpsURLConnection) request_url.openConnection();
+        } catch (IOException e) {
+            e.printStackTrace();
+            String erMsg = "URL connection couldn't be opened for the following adress(" + request_url + ").";
+            throw new IOException(erMsg);
+        }
+        try {
             httpsURLConnection.setRequestMethod("POST");
-            httpsURLConnection.setDoInput(true);
+        } catch (ProtocolException e) {
+            e.printStackTrace();
+            String erMsg = "Cannot set POST as request method to url connection";
+            throw new ProtocolException(erMsg);
 
-
-            httpsURLConnection.setHostnameVerifier(new HostnameVerifier() {
-                @Override
-                public boolean verify(String hostname, SSLSession session) {
-                    if (context.getResources().getString(R.string.feedback_web_service_url).contains(hostname)) {
-                        return true;
-                    }
-                    return false;
-                }
-            });
-
-
-            httpsURLConnection.setSSLSocketFactory((SSLSocketFactory) SSLSocketFactory.getDefault());
+        }
+        httpsURLConnection.setDoInput(true);
+        httpsURLConnection.setHostnameVerifier(new HostnameVerifier() {
+            @Override
+            public boolean verify(String hostname, SSLSession session) {
+                return context.getResources().getString(R.string.feedback_web_service_url).contains(hostname);
+            }
+        });
+        httpsURLConnection.setSSLSocketFactory((SSLSocketFactory) SSLSocketFactory.getDefault());
+        try {
             httpsURLConnection.connect();
         } catch (IOException e) {
             e.printStackTrace();
+            String erMsg = "URL connection couldn't be connected for the following adress(" + httpsURLConnection.getURL() + ").";
+            throw new IOException(erMsg);
         }
+
     }
 
     public static void postToFeedbWS(Context context, String data, String webServiceUrl, String contentType,
@@ -167,20 +203,21 @@ public class Utils {
                     @Override
                     public void onResponse(String response) {
                         makeShortToast(context, successMsg);
-                        Log.i(tag, "\n" + context.getResources()
-                                .getString(R.string.fbs_response_message) + response);
+                        Log.i(TAG, "\n" + context.getResources()
+                                .getString(R.string.fbs_response_message) + "\n" + response);
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 makeShortToast(context, errorMsg);
-                Log.e(tag, context.getResources().getString(R.string.fbs_error_message)
+                Log.e(TAG, context.getResources().getString(R.string.fbs_error_message)
                         + error.getMessage());
             }
         }) {
 
             @Override
             public byte[] getBody() throws AuthFailureError {
+
                 return data.getBytes(Charset.defaultCharset());
             }
 
@@ -216,14 +253,14 @@ public class Utils {
                     @Override
                     public void onResponse(String response) {
                         makeShortToast(context, successMsg);
-                        Log.i(tag, "\n" + context.getResources()
+                        Log.i(TAG, "\n" + context.getResources()
                                 .getString(R.string.fbs_response_message) + response);
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 makeShortToast(context, errorMsg);
-                Log.e(tag, context.getResources().getString(R.string.fbs_error_message)
+                Log.e(TAG, context.getResources().getString(R.string.fbs_error_message)
                         + error.getMessage());
             }
         }) {
@@ -291,10 +328,7 @@ public class Utils {
 
                     Log.e("CipherUsed", session.getCipherSuite());
                     String serverURL = appContext.getResources().getString(R.string.feedback_web_service_url);
-                    if (serverURL.contains(hostname)) {
-                        return true;
-                    }
-                    return false;
+                    return serverURL.contains(hostname);
 //                    return hostname.compareTo()==0; //The Hostname of your server.
 
                 }
@@ -380,8 +414,16 @@ public class Utils {
     public static String fetchStringFromPreferences(Context context, String key) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(
                 context.getResources().getString(R.string.shared_preferences_name), Context.MODE_PRIVATE);
+
         return sharedPreferences.getString(key, context.getResources().
                 getString(R.string.no_data_found_shrd_prfs));
+    }
+
+    public static void cleanSharedPreferences(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(
+                context.getResources().getString(R.string.shared_preferences_name), Context.MODE_PRIVATE);
+        sharedPreferences.edit().clear().apply();
+
     }
 
     public static void makeShortToast(Context context, String message) {
@@ -390,6 +432,18 @@ public class Utils {
 
     public static void makeLongToast(Context context, String message) {
         Toast.makeText(context, message, Toast.LENGTH_LONG).show();
+    }
+
+    public static String getCurrentTime() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        Date currentTime = Calendar.getInstance().getTime();
+        return dateFormat.format(currentTime);
+    }
+
+    public static boolean isConnectedToInternet(Context context) {
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        return Objects.requireNonNull(connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE)).getState() == NetworkInfo.State.CONNECTED ||
+                Objects.requireNonNull(connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI)).getState() == NetworkInfo.State.CONNECTED;
     }
 
 }

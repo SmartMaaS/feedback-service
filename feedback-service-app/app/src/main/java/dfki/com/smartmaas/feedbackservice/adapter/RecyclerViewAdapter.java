@@ -16,7 +16,7 @@ import dfki.com.smartmaas.feedbackservice.R;
 import dfki.com.smartmaas.feedbackservice.model.Stop;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.RecyclerViewViewHolder> {
-    private static final String tag = "RecyclerViewAdapter";
+    private static final String TAG = RecyclerViewAdapter.class.getName();
     private List<Stop> stopList;
 
     static class RecyclerViewViewHolder extends RecyclerView.ViewHolder {

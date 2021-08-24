@@ -18,7 +18,7 @@ import dfki.com.smartmaas.feedbackservice.util.Utils;
 
 
 public class PreliminaryFragment extends CustomFragment {
-    private final static String tag = "PreliminaryFragment";
+    private final static String TAG = PreliminaryFragment.class.getName();
     private TextView continueTxVw;
     private MainActivity activity;
     private ConstraintLayout navigationMenu;
@@ -42,13 +42,27 @@ public class PreliminaryFragment extends CustomFragment {
     }
 
     private void initialiseViews(View view) {
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        // Click action for the Preliminary (initial) screen
+        view.setOnClickListener(view1 -> {
+
+            String userName = Utils.fetchStringFromPreferences(activity.getApplicationContext(), getResources().getString(R.string.username_key_shrd_prf));
+            // if username not exists, then open login fragment
+            if (userName == null || userName.equals("") || userName.equals(getResources().getString(R.string.no_data_found_shrd_prfs))) {
                 LoginFragment loginFragment = new LoginFragment();
                 activity.replaceFragment(loginFragment, loginFragment.getCustomTAG(),
                         false, android.R.anim.fade_in, android.R.anim.fade_out);
+            } else {
+                // if username exists, then open feedback fragment
+
+                FeedbackFragment feedbackFragment = activity.getFeedbackFragment();
+                activity.replaceFragment(feedbackFragment, feedbackFragment.getCustomTAG(),
+                        false, android.R.anim.fade_in, android.R.anim.fade_out);
+                activity.setMenuItemActive(feedbackFragment.getCustomTAG());
+                Utils.showNavigationBottomView(navigationMenu);
+
             }
+
+
         });
         continueTxVw = view.findViewById(R.id.contineTxVw);
         navigationMenu = activity.findViewById(R.id.container);
@@ -56,6 +70,6 @@ public class PreliminaryFragment extends CustomFragment {
 
     @Override
     public String getCustomTAG() {
-        return tag;
+        return TAG;
     }
 }

@@ -8,17 +8,31 @@ import org.simpleframework.xml.Root;
 import java.util.List;
 
 @Root
+//@ApiModel(description = "Model for Feedback Input")
 public class Feedback {
     private String feedbackURI = "http://www.example.com/feedback";
+    public static final String example = "@prefix ex:    <http://example.org/> .\n" +
+            "\n" +
+            "ex:feedback  ex:location_latitude  \"7.021859999999999\" ;\n" +
+            "        ex:location_longitude  \"49.24471\" ;\n" +
+            "        ex:location_name       \"Waldhausweg 17, 66123 Saarbrücken, Germany\" ;\n" +
+            "        ex:radius              \"km\" , \"83\" ;\n" +
+            "        ex:stuck_duration      \"5\" , \"minute\" ;\n" +
+            "        ex:travelsOn           \"5\" , \"bus\" .";
     @Element
+//    @ApiModelProperty(notes = "Address of the feedback")
     private Location location;
     @Element
+//    @ApiModelProperty(notes = "Amount of time for user to be stuck on the road", example = "15")
     private int stuckTime;
     @Element
+//    @ApiModelProperty(notes = "Unit of the time", example = "minute")
     private String measurementUnit;
     @Element
+//    @ApiModelProperty(notes = "Vehicle of the user", example = "Bus")
     private String vehicle;
     @Element
+//    @ApiModelProperty(notes = "Number of the vehicle", example = "102")
     private String vehicleNo;
     @Element
     private int radius;
@@ -28,6 +42,7 @@ public class Feedback {
     public Feedback() {
 
     }
+
     public Feedback(Location location, int stuckTime, String measurementUnit, String vehicle, String vehicleNo) {
         this.location = location;
         this.stuckTime = stuckTime;

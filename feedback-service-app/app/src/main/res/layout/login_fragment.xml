@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:ems="10"
-            android:hint="@string/word_email"
+            android:hint="@string/word_username"
             android:inputType="textPersonName" />
 
         <EditText
@@ -56,10 +56,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:clickable="true"
+                android:clickable="false"
                 android:text="Registration"
                 android:textAllCaps="true"
-                android:textColor="#5E35B1"
+                android:textColor="#A9A9A9"
                 android:textSize="18sp"
                 android:textStyle="bold|italic" />
         </LinearLayout>

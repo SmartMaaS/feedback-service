@@ -29,6 +29,7 @@
                 android:textStyle="bold" />
 
             <CheckBox
+                android:id="@+id/englishChBID"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -37,6 +38,7 @@
                 android:textColor="#000000" />
 
             <CheckBox
+                android:id="@+id/germanChBID"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

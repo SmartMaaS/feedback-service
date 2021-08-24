@@ -18,20 +18,4 @@ public class FeedbackWebserviceApplicationTests {
     @Test
     public void contextLoads() {
     }
-
-    @Test
-    public void rdf4jServerTest() {
-        RepositoryManager repoManager = RepositoryProvider.getRepositoryManager(rdf4jServer);
-        try {
-            repoManager.getAllRepositories();
-        } catch (Exception e) {
-//            e.printStackTrace();
-            LOGGER.severe("Please, run start_rdf4j_server.bat file!!!");
-            assert false;
-        }
-
-        assert repoManager.getAllRepositories().size() >= 0;
-        assert repoManager.isInitialized();
-    }
-
 }

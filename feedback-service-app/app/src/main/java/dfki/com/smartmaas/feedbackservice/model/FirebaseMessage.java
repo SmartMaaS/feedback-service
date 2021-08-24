@@ -1,13 +1,13 @@
 package dfki.com.smartmaas.feedbackservice.model;
 
-import com.google.firebase.messaging.RemoteMessage;
+//import com.google.firebase.messaging.RemoteMessage;
 
 import java.util.List;
 
 public class FirebaseMessage {
-    private static final String tag = "FirebaseMessage";
+    private static final String TAG = FirebaseMessage.class.getName();
     private List<Stop> stops;
-    private RemoteMessage.Notification notification;
+    //    private RemoteMessage.Notification notification;
     private int totalItems;
 
 
@@ -19,13 +19,13 @@ public class FirebaseMessage {
         this.stops = stops;
     }
 
-    public RemoteMessage.Notification getNotification() {
-        return notification;
-    }
-
-    public void setNotification(RemoteMessage.Notification notification) {
-        this.notification = notification;
-    }
+//    public RemoteMessage.Notification getNotification() {
+//        return notification;
+//    }
+//
+//    public void setNotification(RemoteMessage.Notification notification) {
+//        this.notification = notification;
+//    }
 
     public int getTotalItems() {
         return totalItems;
@@ -36,7 +36,7 @@ public class FirebaseMessage {
     }
 
     public static String getTag() {
-        return tag;
+        return TAG;
     }
 
     public void addStops(List<Stop> stops) {
